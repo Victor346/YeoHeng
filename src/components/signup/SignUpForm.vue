@@ -1,5 +1,5 @@
 <template>
-  <form @submit="handleSubmit()">
+  <form @submit="handleSubmit">
     <b-field
       class="has-text-left"
       label="Name"

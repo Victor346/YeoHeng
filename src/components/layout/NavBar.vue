@@ -1,6 +1,9 @@
 <template>
 
-  <b-navbar type="is-light">
+  <b-navbar
+    :fixed-top="true"
+    type="is-light"
+  >
 
     <template slot="brand">
       <b-navbar-item
@@ -40,9 +43,13 @@
           >
             <strong>Sign up</strong>
           </b-button>
-          <a class="button is-light">
+          <b-button
+            tag="router-link"
+            :to="{ path: '/login' }"
+            type="is-light"
+          >
             Log in
-          </a>
+          </b-button>
         </div>
       </b-navbar-item>
     </template>

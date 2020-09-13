@@ -4,9 +4,24 @@
       rel="stylesheet"
       href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css"
     >
-    <router-view/>
+    <NavBar />
+    <router-view id="router-view"/>
+    <Footer class="is-hidden-mobile" />
   </div>
 </template>
+
+<script>
+import NavBar from '@/components/layout/NavBar.vue';
+import Footer from '@/components/layout/Footer.vue';
+
+export default {
+  name: 'App',
+  components: {
+    NavBar,
+    Footer,
+  },
+};
+</script>
 
 <style>
 #app {
@@ -16,4 +31,17 @@
   text-align: center;
   color: #2c3e50;
 }
+
+#router-view {
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+@media screen and (max-width: 1024px) {
+  #router-view {
+    margin-top: 16%;
+    margin-bottom: 8%;
+  }
+}
+
 </style>
