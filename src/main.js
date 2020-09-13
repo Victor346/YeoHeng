@@ -7,7 +7,10 @@ import store from './store';
 import 'buefy/dist/buefy.css';
 
 Vue.config.productionTip = false;
-Vue.use(Buefy);
+Vue.use(Buefy, {
+  defaultIconPack: 'mdi',
+  defaultContainerElement: '#content',
+});
 
 new Vue({
   router,
