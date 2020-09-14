@@ -1,12 +1,27 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <link
+      rel="stylesheet"
+      href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css"
+    >
+    <NavBar />
+    <router-view id="router-view"/>
+    <Footer class="is-hidden-mobile" />
   </div>
 </template>
+
+<script>
+import NavBar from '@/components/layout/NavBar.vue';
+import Footer from '@/components/layout/Footer.vue';
+
+export default {
+  name: 'App',
+  components: {
+    NavBar,
+    Footer,
+  },
+};
+</script>
 
 <style>
 #app {
@@ -17,16 +32,16 @@
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
+#router-view {
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+@media screen and (max-width: 1024px) {
+  #router-view {
+    margin-top: 16%;
+    margin-bottom: 8%;
+  }
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
