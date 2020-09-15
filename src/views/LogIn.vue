@@ -10,7 +10,7 @@
     </section>
     <section class="section">
       <div class="columns">
-        <div class="column is-6 is-offset-3">
+        <div class="column is-4 is-offset-4">
           <LoginForm />
         </div>
       </div>

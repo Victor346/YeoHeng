@@ -33,14 +33,14 @@ export default {
 }
 
 #router-view {
-  margin-top: 5%;
-  margin-bottom: 5%;
+  padding-top: 5%;
+  padding-bottom: 5%;
 }
 
 @media screen and (max-width: 1024px) {
   #router-view {
-    margin-top: 16%;
-    margin-bottom: 8%;
+    padding-top: 16%;
+    padding-bottom: 8%;
   }
 }
 

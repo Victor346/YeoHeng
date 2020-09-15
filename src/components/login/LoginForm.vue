@@ -30,7 +30,7 @@
       position="is-centered"
     >
       <button
-        class="button is-info is-rounded"
+        class="button is-info is-rounded my-4"
         type="submit"
       >
         Log In
