@@ -1,4 +1,5 @@
 <template>
+
   <div class="home">
 
     <section class="intro has-text-left">
@@ -7,27 +8,33 @@
     </section>
 
     <section>
-      <h1 class="subtitle is-3">Eventos</h1>
-      <EventCarousel/>
-    </section>
-
-    <section>
-      <h1 class="subtitle is-3">Viajes</h1>
-      <h1 class="subtitle"> TODO: Trip Carousel   </h1>
+      <div class="columns">
+        <div class="column is-half">
+          <h1 class="subtitle is-3">Eventos</h1>
+          <EventCarousel />
+        </div>
+        <div class="column">
+          <h1 class="subtitle is-3">Viajes</h1>
+          <TripCarousel />
+        </div>
+      </div>
     </section>
 
   </div>
+
 </template>
 
 <script>
 // @ is an alias to /src
-import EventCarousel from '@/components/homepage/EventCarousel.vue';
 import Intro from '@/components/homepage/Intro.vue';
+import EventCarousel from '@/components/homepage/EventCarousel.vue';
+import TripCarousel from '@/components/homepage/TripCarousel.vue';
 
 export default {
   name: 'Home',
   components: {
     EventCarousel,
+    TripCarousel,
     Intro,
   },
 };
@@ -35,6 +42,6 @@ export default {
 
 <style scoped>
 section {
-  margin: 2%;
+  padding: 2%;
 }
 </style>
