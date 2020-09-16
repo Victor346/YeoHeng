@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import SignUp from '@/views/SignUp.vue';
 import LogIn from '@/views/LogIn.vue';
+import EventCreation from '@/views/events/EventCreation.vue';
 
 Vue.use(VueRouter);
 
@@ -29,6 +30,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: LogIn,
+  },
+  {
+    path: '/event/new',
+    name: 'New Event',
+    component: EventCreation,
   },
 ];
 
