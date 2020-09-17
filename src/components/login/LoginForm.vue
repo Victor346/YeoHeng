@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import { AUTHENTICATE_USER } from '@/store/actions/types';
+
 export default {
   name: 'LoginForm',
   data() {
@@ -51,7 +53,10 @@ export default {
   methods: {
     handleSubmit(e) {
       e.preventDefault();
-      console.log('TODO: Login POST');
+      this.$store.dispatch(AUTHENTICATE_USER, {
+        email: this.username,
+        password: this.password,
+      });
     },
   },
 };
