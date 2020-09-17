@@ -47,6 +47,7 @@
       label="Password"
     >
       <b-input
+        v-model="password"
         type="password"
         placeholder="Insert your password"
         required
@@ -80,6 +81,8 @@
 </template>
 
 <script>
+import { REGISTER_USER } from '@/store/actions/types';
+
 export default {
   name: 'SignUpForm',
   data() {
@@ -93,7 +96,12 @@ export default {
   methods: {
     handleSubmit(e) {
       e.preventDefault();
-      console.log('Holad');
+      this.$store.dispatch(REGISTER_USER, {
+        name: this.name,
+        username: this.username,
+        email: this.email,
+        password: this.password,
+      });
     },
   },
 };

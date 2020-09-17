@@ -1,13 +1,16 @@
 <template>
   <div class="hero is-light is-bold">
-    <div class="columns is-vcentered my-2">
-      <div class="column is-10 ml-4">
+    <div class="columns is-vcentered my-2 mx-4">
+      <div class="column is-2 is-hidden-mobile">
+        <img src="../../assets/img/paris_home.jpg" alt="logo"/>
+      </div>
+      <div class="column is-8">
         <h1 class="subtitle is-4">
           {{description}}
         </h1>
       </div>
       <div class="column">
-        <img src="../../assets/yeoheng_logo.png" alt="logo"/>
+        <img src="../../assets/img/paris_home_2.jpg" alt="logo"/>
       </div>
     </div>
   </div>
@@ -28,5 +31,6 @@ export default {
 </script>
 
 <style scoped>
-
+img {
+}
 </style>
