@@ -6,10 +6,6 @@ import router from './router';
 import store from './store';
 import 'buefy/dist/buefy.css';
 
-const dotenv = require('dotenv');
-
-dotenv.config();
-
 Vue.config.productionTip = false;
 Vue.use(Buefy, {
   defaultIconPack: 'mdi',
