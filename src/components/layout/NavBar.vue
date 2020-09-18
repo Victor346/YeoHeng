@@ -31,6 +31,10 @@
           Contact
         </b-navbar-item>
       </b-navbar-dropdown>
+      <b-navbar-item
+        tag="router-link"
+        :to="{ path: '/events' }"
+      >Events</b-navbar-item>
     </template>
 
     <template slot="end">

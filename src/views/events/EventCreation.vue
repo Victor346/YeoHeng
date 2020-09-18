@@ -29,11 +29,14 @@
               </b-autocomplete>
             </b-field>
 
-            <b-field label="Price">
+            <b-field label="Price (USD)">
               <b-input
                 v-model="price"
                 placeholder="00.00"
                 icon="currency-usd"
+                type="number"
+                min="0"
+                step=".01"
                 required
               ></b-input>
             </b-field>
@@ -43,7 +46,25 @@
           <div class="column is-half">
 
             <b-field label="Duration">
-              <b-clockpicker v-model="duration" :hour-format="'24'" required></b-clockpicker>
+              <b-input
+                v-model="hour"
+                placeholder="Hours"
+                type="number"
+                min="0"
+                max="24"
+                default="0"
+                required
+              ></b-input>
+              <h5 class="title is-5 is-vertical"
+                  style="margin-top: 6px; margin-left: 2px; margin-right: 2px;">:</h5>
+              <b-input
+                v-model="minutes"
+                placeholder="0"
+                type="number"
+                min="0"
+                max="59"
+                required
+              ></b-input>
             </b-field>
             <b-field label="Category">
               <b-select v-model="category" placeholder="Select a category" required>
@@ -108,6 +129,8 @@ export default {
     return {
       selectedCity: null,
       name: '',
+      hour: 0,
+      minutes: 0,
       description: '',
       suggestions: [],
       google: null,
@@ -124,6 +147,10 @@ export default {
         {
           name: 'Sports',
           id: 2,
+        },
+        {
+          name: 'Food',
+          id: 3,
         },
       ],
     };
@@ -208,6 +235,8 @@ export default {
                 image: publicUrl,
                 tags: this.tags,
                 user_id: this.$store.state.login.id,
+                price: parseFloat(this.price),
+                duration: `${this.hour} hour(s) ${this.minutes} minute(s)`,
               };
               console.log(JSON.stringify(params));
               const config = {
