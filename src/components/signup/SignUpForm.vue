@@ -101,7 +101,14 @@ export default {
         username: this.username,
         email: this.email,
         password: this.password,
-      });
+      })
+        .then(() => {
+          if (this.$store.state.login.error === null) {
+            this.$router.push('/events');
+          } else {
+            console.log(this.$store.state.login.error);
+          }
+        });
     },
   },
 };

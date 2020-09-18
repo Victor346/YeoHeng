@@ -2,11 +2,12 @@
   <form @submit="handleSubmit">
     <b-field
       class="has-text-left"
-      label="Username"
+      label="Email"
     >
       <b-input
-        v-model="username"
-        placeholder="Insert your username or email"
+        v-model="email"
+        type="email"
+        placeholder="Insert your email"
         icon="account"
         required
       >
@@ -46,7 +47,7 @@ export default {
   name: 'LoginForm',
   data() {
     return {
-      username: '',
+      email: '',
       password: '',
     };
   },
@@ -54,9 +55,16 @@ export default {
     handleSubmit(e) {
       e.preventDefault();
       this.$store.dispatch(AUTHENTICATE_USER, {
-        email: this.username,
+        email: this.email,
         password: this.password,
-      });
+      })
+        .then(() => {
+          if (this.$store.state.login.error === null) {
+            this.$router.push('/events');
+          } else {
+            console.log(this.$store.state.login.error);
+          }
+        });
     },
   },
 };
