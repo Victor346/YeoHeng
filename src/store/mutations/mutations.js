@@ -17,4 +17,10 @@ export default {
     state.login.isLoading = true;
     state.login.error = null;
   },
+  [MutationTypes.LOGOUT](state) {
+    state.login.isLoading = false;
+    state.login.username = null;
+    state.login.token = null;
+    state.login.error = null;
+  },
 };

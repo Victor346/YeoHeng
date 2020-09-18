@@ -11,10 +11,10 @@ const loginUrl = `${process.env.VUE_APP_BACKEND_URL}/login`;
 const registerUrl = `${process.env.VUE_APP_BACKEND_URL}/signup`;
 
 export default {
-  [ActionTypes.AUTHENTICATE_USER]({ commit }, payload) {
+  async [ActionTypes.AUTHENTICATE_USER]({ commit }, payload) {
     commit(MutationTypes.LOGIN_LOADING);
 
-    axios.post(loginUrl, qs.stringify(payload), {
+    await axios.post(loginUrl, qs.stringify(payload), {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -24,7 +24,6 @@ export default {
           username: response.data.username,
           token: response.data.jwt,
         });
-        console.log(JSON.stringify(response));
       })
       .catch((error) => {
         commit(MutationTypes.LOGIN_FAILED, {
@@ -33,10 +32,10 @@ export default {
       });
   },
   // TODO: Se mamaron en el back: signup es con JSON y login es www-unencoded
-  [ActionTypes.REGISTER_USER]({ commit }, payload) {
+  async [ActionTypes.REGISTER_USER]({ commit }, payload) {
     commit(MutationTypes.LOGIN_LOADING);
 
-    axios.post(registerUrl, payload)
+    await axios.post(registerUrl, payload)
       .then((response) => {
         commit(MutationTypes.LOGIN_SUCCESS, {
           username: response.data.username,
