@@ -44,7 +44,6 @@ const routes = [
     path: '/events',
     name: 'Events',
     component: ViewEvent,
-    meta: { requiresAuthentication: true },
   },
 ];
 

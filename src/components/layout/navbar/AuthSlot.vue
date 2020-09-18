@@ -10,7 +10,7 @@
       </b-button>
       <b-button
         tag="router-link"
-        :to="{ path: '/events' }"
+        :to="{ path: '/login' }"
         type="is-light"
       >
         Log In

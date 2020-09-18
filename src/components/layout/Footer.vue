@@ -25,7 +25,7 @@
 
     <template slot="end">
       <b-navbar-item tag="div">
-        <strong>Copyright Kum, 2020</strong>
+        <strong>Copyright YeoHeng, 2020</strong>
       </b-navbar-item>
     </template>
 
