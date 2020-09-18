@@ -49,7 +49,7 @@
               <b-select v-model="category" placeholder="Select a category" required>
                 <option
                   v-for="option in categories"
-                  :value="option.id"
+                  :value="option.name"
                   :key="option.id"
                 >
                   {{ option.name }}
@@ -112,7 +112,7 @@ export default {
       price: null,
       duration: null,
       category: null,
-      tags: null,
+      tags: [],
       categories: [
         {
           name: 'Culture',
@@ -126,7 +126,7 @@ export default {
     };
   },
   async mounted() {
-    const apiKey = ''; // TODO: Use real apikey from .env
+    const apiKey = ''; // TODO: Use real google apikey from .env
     const googleMapApi = await GoogleMapsApiLoader({
       libraries: ['places'],
       apiKey,
@@ -134,6 +134,22 @@ export default {
     this.google = googleMapApi;
   },
   methods: {
+    success_snackbar() {
+      this.$buefy.snackbar.open({
+        message: 'Your event has been registered successfully',
+        position: 'is-top',
+      });
+    },
+    error_snackbar() {
+      this.$buefy.snackbar.open({
+        duration: 10000,
+        message: 'An error has ocurred while registering your event',
+        type: 'is-danger',
+        position: 'is-top',
+        actionText: 'Retry',
+        onAction: () => this.handleSubmit(),
+      });
+    },
     getApiResults(input) {
       const request = {
         input,
@@ -155,34 +171,61 @@ export default {
       });
     },
     handleSubmit() {
-      console.log('jola');
-      const params = {
-        name: this.name,
-        description: this.description,
-        personal_type: this.category,
-        country: this.country,
-        city: this.city,
-      };
       const splittedFileName = this.file.name.split('.');
-      const presignedParams = {
-        file_extension: splittedFileName[splittedFileName.length - 1],
-        username: 'Vc346',
-      };
-      console.log(params);
-      console.log(presignedParams);
-      axios({
-        url: '',
-        method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: JSON.stringify(presignedParams),
-      })
+      const presignedParams = new URLSearchParams();
+      presignedParams.append('file_extension', splittedFileName[splittedFileName.length - 1]);
+      presignedParams.append('username', ''); // TODO: Get username from store
+
+      axios.get('http://localhost:3000/event/presigned', { params: presignedParams })
         .then((response) => {
-          console.log(response);
+          const presignedUrl = response.data.presigned_url;
+          const publicUrl = response.data.public_url;
+          console.log(publicUrl);
+          const options = {
+            headers: {
+              'Content-Type': this.file.type,
+            },
+          };
+          axios.put(presignedUrl, this.file, options)
+            .then((result) => {
+              const params = {
+                name: this.name,
+                description: this.description,
+                personal_type: this.category,
+                country: this.selectedCity.country,
+                city: this.selectedCity.city,
+                image: publicUrl,
+                tags: this.tags,
+                user_id: '', // TODO: place user_id from store
+              };
+              console.log(JSON.stringify(params));
+              const config = {
+                method: 'post',
+                url: 'http://localhost:3000/protected',
+                headers: {
+                  Authorization: 'Bearer ', // TODO: place token from store
+                  'Content-Type': 'application/json',
+                },
+                data: JSON.stringify(params),
+              };
+
+              axios(config)
+                .then((res) => {
+                  this.success_snackbar();
+                  console.log(res);
+                })
+                .catch(() => {
+                  this.error_snackbar();
+                });
+
+              console.log(result);
+            })
+            .catch(() => {
+              this.error_snackbar();
+            });
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          this.error_snackbar();
         });
     },
   },
