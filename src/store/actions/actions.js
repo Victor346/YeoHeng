@@ -23,6 +23,7 @@ export default {
         commit(MutationTypes.LOGIN_SUCCESS, {
           username: response.data.username,
           token: response.data.jwt,
+          id: response.data.id,
         });
       })
       .catch((error) => {
@@ -40,6 +41,7 @@ export default {
         commit(MutationTypes.LOGIN_SUCCESS, {
           username: response.data.username,
           token: response.data.jwt,
+          id: response.data.id,
         });
       })
       .catch((error) => {
