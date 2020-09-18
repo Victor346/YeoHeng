@@ -1,8 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+
+import store from '@/store/index';
 import Home from '@/views/Home.vue';
 import SignUp from '@/views/SignUp.vue';
 import LogIn from '@/views/LogIn.vue';
+import EventsTemp from '@/views/EventsTemp.vue';
 
 Vue.use(VueRouter);
 
@@ -30,12 +33,30 @@ const routes = [
     name: 'Login',
     component: LogIn,
   },
+  {
+    path: '/events',
+    name: 'Events',
+    component: EventsTemp,
+    meta: { requiresAuthentication: true },
+  },
 ];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuthentication)) {
+    if (store.state.login.username !== null && store.state.login.token !== null) {
+      next();
+    } else {
+      next({ name: 'Login' });
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

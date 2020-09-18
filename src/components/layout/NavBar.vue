@@ -34,30 +34,23 @@
     </template>
 
     <template slot="end">
-      <b-navbar-item tag="div">
-        <div class="buttons">
-          <b-button
-            tag="router-link"
-            :to="{ path: '/signup' }"
-            type="is-primary"
-          >
-            <strong>Sign up</strong>
-          </b-button>
-          <b-button
-            tag="router-link"
-            :to="{ path: '/login' }"
-            type="is-light"
-          >
-            Log in
-          </b-button>
-        </div>
-      </b-navbar-item>
+      <MenuSlot v-if="isAuthenticated"/>
+      <AuthSlot v-else />
     </template>
   </b-navbar>
 </template>
 
 <script>
+import AuthSlot from '@/components/layout/navbar/AuthSlot.vue';
+import MenuSlot from '@/components/layout/navbar/MenuSlot.vue';
+
 export default {
   name: 'NavBar',
+  components: { MenuSlot, AuthSlot },
+  computed: {
+    isAuthenticated() {
+      return this.$store.state.login.username !== null && this.$store.state.login.token !== null;
+    },
+  },
 };
 </script>
