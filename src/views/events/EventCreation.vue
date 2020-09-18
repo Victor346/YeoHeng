@@ -96,8 +96,11 @@
 
 <script>
 import GoogleMapsApiLoader from 'google-maps-api-loader';
-// eslint-disable-next-line no-unused-vars
 import axios from 'axios';
+
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 export default {
   name: 'EventCreation',
@@ -126,7 +129,7 @@ export default {
     };
   },
   async mounted() {
-    const apiKey = ''; // TODO: Use real google apikey from .env
+    const apiKey = process.env.VUE_APP_GOOGLE_API_KEY;
     const googleMapApi = await GoogleMapsApiLoader({
       libraries: ['places'],
       apiKey,
@@ -174,9 +177,14 @@ export default {
       const splittedFileName = this.file.name.split('.');
       const presignedParams = new URLSearchParams();
       presignedParams.append('file_extension', splittedFileName[splittedFileName.length - 1]);
-      presignedParams.append('username', ''); // TODO: Get username from store
+      presignedParams.append('username', this.$store.state.login.username);
 
-      axios.get('http://localhost:3000/event/presigned', { params: presignedParams })
+      axios.get(`${process.env.VUE_APP_BACKEND_URL}/event/presigned`, {
+        params: presignedParams,
+        headers: {
+          Authorization: `Bearer ${this.$store.state.login.token}`,
+        },
+      })
         .then((response) => {
           const presignedUrl = response.data.presigned_url;
           const publicUrl = response.data.public_url;
@@ -186,6 +194,9 @@ export default {
               'Content-Type': this.file.type,
             },
           };
+
+          console.log(options);
+
           axios.put(presignedUrl, this.file, options)
             .then((result) => {
               const params = {
@@ -196,21 +207,23 @@ export default {
                 city: this.selectedCity.city,
                 image: publicUrl,
                 tags: this.tags,
-                user_id: '', // TODO: place user_id from store
+                user_id: this.$store.state.login.id,
               };
               console.log(JSON.stringify(params));
               const config = {
                 method: 'post',
-                url: 'http://localhost:3000/protected',
+                url: `${process.env.VUE_APP_BACKEND_URL}/event/create`,
                 headers: {
-                  Authorization: 'Bearer ', // TODO: place token from store
+                  Authorization: `Bearer ${this.$store.state.login.token}`,
                   'Content-Type': 'application/json',
                 },
                 data: JSON.stringify(params),
               };
+              console.log(config);
 
               axios(config)
                 .then((res) => {
+                  this.$router.push('/events');
                   this.success_snackbar();
                   console.log(res);
                 })

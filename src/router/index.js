@@ -38,6 +38,7 @@ const routes = [
     path: '/event/new',
     name: 'New Event',
     component: EventCreation,
+    meta: { requiresAuthentication: true },
   },
   {
     path: '/events',

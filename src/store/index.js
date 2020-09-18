@@ -1,10 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createLogger from 'vuex/dist/logger';
+import VuexPersistence from 'vuex-persist';
 import Mutations from './mutations/mutations';
 import Actions from './actions/actions';
 
 Vue.use(Vuex);
+
+const vuexLocal = new VuexPersistence({
+  storage: window.sessionStorage,
+});
 
 export default new Vuex.Store({
   state: {
@@ -12,12 +17,13 @@ export default new Vuex.Store({
       isLoading: false,
       username: null,
       token: null,
+      id: null,
       error: null,
     },
   },
   mutations: Mutations,
   actions: Actions,
-  plugins: [createLogger()],
+  plugins: [createLogger(), vuexLocal.plugin],
   modules: {
 
   },
