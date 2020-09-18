@@ -6,7 +6,7 @@ import Home from '@/views/Home.vue';
 import SignUp from '@/views/SignUp.vue';
 import LogIn from '@/views/LogIn.vue';
 import EventCreation from '@/views/events/EventCreation.vue';
-import EventsTemp from '@/views/EventsTemp.vue';
+import ViewEvent from '@/views/events/ViewEvent.vue';
 
 Vue.use(VueRouter);
 
@@ -43,7 +43,7 @@ const routes = [
   {
     path: '/events',
     name: 'Events',
-    component: EventsTemp,
+    component: ViewEvent,
     meta: { requiresAuthentication: true },
   },
 ];
