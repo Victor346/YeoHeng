@@ -7,6 +7,7 @@ import SignUp from '@/views/SignUp.vue';
 import LogIn from '@/views/LogIn.vue';
 import EventCreation from '@/views/events/EventCreation.vue';
 import ViewEvent from '@/views/events/ViewEvent.vue';
+import ViewTrip from '@/views/trips/ViewTrip.vue';
 
 Vue.use(VueRouter);
 
@@ -44,6 +45,11 @@ const routes = [
     path: '/events',
     name: 'Events',
     component: ViewEvent,
+  },
+  {
+    path: '/trips',
+    name: 'Trips',
+    component: ViewTrip,
   },
 ];
 
