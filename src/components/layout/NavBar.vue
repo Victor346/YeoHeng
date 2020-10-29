@@ -34,7 +34,15 @@
       <b-navbar-item
         tag="router-link"
         :to="{ path: '/events' }"
-      >Events</b-navbar-item>
+      >
+        Events
+      </b-navbar-item>
+      <b-navbar-item
+        tag="router-link"
+        :to="{ path: '/trip/new' }"
+      >
+        New Trip
+      </b-navbar-item>
     </template>
 
     <template slot="end">
