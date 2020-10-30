@@ -96,6 +96,9 @@ export default {
   methods: {
     handleSubmit(e) {
       e.preventDefault();
+      const loadingComponent = this.$buefy.loading.open({
+        container: null,
+      });
       this.$store.dispatch(REGISTER_USER, {
         name: this.name,
         username: this.username,
@@ -103,12 +106,27 @@ export default {
         password: this.password,
       })
         .then(() => {
+          loadingComponent.close();
           if (this.$store.state.login.error === null) {
             this.$router.push('/events');
           } else {
+            let message = 'An error occurred while registering the user';
+            if (this.$store.state.login.error === 'User is already registered') {
+              message = 'An user with the same email already exists';
+            }
+            this.error_snackbar(message);
             console.log(this.$store.state.login.error);
           }
         });
+    },
+    error_snackbar(message) {
+      this.$buefy.snackbar.open({
+        duration: 5000,
+        message,
+        type: 'is-danger',
+        position: 'is-top',
+        actionText: 'Ok',
+      });
     },
   },
 };
