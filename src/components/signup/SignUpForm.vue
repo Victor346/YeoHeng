@@ -112,7 +112,7 @@ export default {
           } else {
             let message = 'An error occurred while registering the user';
             if (this.$store.state.login.error === 'User is already registered') {
-              message = 'An user with the same email already exists';
+              message = 'An user with the same email or username already exists';
             }
             this.error_snackbar(message);
             console.log(this.$store.state.login.error);
