@@ -7,6 +7,7 @@ import SignUp from '@/views/SignUp.vue';
 import LogIn from '@/views/LogIn.vue';
 import EventCreation from '@/views/events/EventCreation.vue';
 import ViewEvent from '@/views/events/ViewEvent.vue';
+import TripEdition from '@/views/trips/TripEdition.vue';
 
 Vue.use(VueRouter);
 
@@ -44,6 +45,12 @@ const routes = [
     path: '/events',
     name: 'Events',
     component: ViewEvent,
+  },
+  {
+    path: '/trip/edit',
+    name: 'Edit Trip',
+    component: TripEdition,
+    meta: { requiresAuthentication: true },
   },
 ];
 
