@@ -47,8 +47,36 @@ Then('I verify demo cards are correct', () => {
   let i = 2;
   const cypressCardCss = `:nth-child(${i}) > .card > .card-content >`;
 
-  cy.get(cypressCardCss + ' .media > .media-content > .title').contains('go to China');
+  cy.get(cypressCardCss + ' .media > .media-content > .title').contains('Uppas');
+  cy.get(cypressCardCss + ' .media > .media-content > .subtitle').contains('Vatican');
+  cy.get(cypressCardCss + ' .content > p').contains('pepe');
+  cy.get(cypressCardCss + ' .content > .tags > :nth-child(1) > span').contains('BTS');
 
+});
 
+Given('I am on the create event page', () => {
+  cy.get('[style="margin-top: 10px;"] > .is-success').click();
+  cy.wait(1000);
+  cy.get('.is-2').contains('Register a new event');
+});
 
+Then('I fill the form', () => {
+  cy.get(':nth-child(1) > :nth-child(1) > :nth-child(1) > .control > .input').type('Test Event');
+  cy.get('.textarea').type('This is a test event. Sorry for using the current image.')
+
+  cy.get(':nth-child(3) > .autocomplete > .control > .input').type('Paris, France');
+  // cy.get('.dropdown-content > :nth-child(1) > div').should('be.visible');
+  cy.get('.dropdown-content > :nth-child(1) > div').click();
+
+  cy.get(':nth-child(4) > .control > .input').type('4500.00');
+  cy.get('.field > :nth-child(1) > .input').type('3');
+  cy.get(':nth-child(3) > .input').type('15');
+
+  cy.get('select').select('Sports').should('have.value', 'Sports');
+
+  cy.get('.taginput-container > .autocomplete > .control > .input').type('example');
+
+  cy.get('.file-label > input').attachFile('pekora.jpg');
+
+  cy.get('.column > .button').click();
 });

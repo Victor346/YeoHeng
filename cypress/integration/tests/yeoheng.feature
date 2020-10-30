@@ -14,3 +14,7 @@ Feature: Yeoheng
     Then I verify event titles are correct
     Then I verify demo cards are correct
 
+  Scenario: Create Event
+    Given I am on the create event page
+    Then I fill the form
+
