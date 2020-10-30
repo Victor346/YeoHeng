@@ -18,7 +18,7 @@
                 <div class="column">
                   <b-field label="Name">
                     <b-input
-                      type="email"
+                      type="text"
                       v-model="name"
                       placeholder="The name for your trip"
                       required>
