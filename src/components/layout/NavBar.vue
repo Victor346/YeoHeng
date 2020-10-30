@@ -39,9 +39,9 @@
       </b-navbar-item>
       <b-navbar-item
         tag="router-link"
-        :to="{ path: '/trip/new' }"
+        :to="{ path: '/trip/edit' }"
       >
-        New Trip
+        Edit Trip
       </b-navbar-item>
     </template>
 

@@ -28,7 +28,6 @@
         </div>
       </div>
     </div>
-    {{JSON.stringify(events)}}
   </div>
 
 </template>

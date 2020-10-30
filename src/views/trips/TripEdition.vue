@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h2 class="title is-3">
-      Create a new trip
+      Edit your trip
     </h2>
     <section>
         <TripForm
@@ -31,7 +31,7 @@ import Calendar from '@/components/trips/Calendar.vue';
 import EventScroller from '@/components/trips/EventScroller.vue';
 
 export default {
-  name: 'TripCreation',
+  name: 'TripEdition',
   components: {
     TripForm,
     Calendar,
@@ -69,6 +69,13 @@ export default {
     pushEvent(event) {
       const from = new Date(event.from).toISOString();
       const finishTime = new Date(Date.parse(from) + (3 * 3600 * 1000)).toISOString();
+
+      const offset = new Date().getTimezoneOffset();
+      const calendarFrom = new Date(Date.parse(from) - (offset * 60 * 1000)).toISOString();
+      const calendarFinishTime = new Date(
+        Date.parse(from) + (3 * 3600 * 1000) - (offset * 60 * 1000),
+      ).toISOString();
+
       this.events.push({
         ...event,
         to: finishTime,
@@ -77,8 +84,8 @@ export default {
       // TODO: El calendario esta 6 horas adelantado por UTC.
       this.$refs.calendar.$kalendar.addNewEvent({
         ...event,
-        to: finishTime,
-        from: event.from.toISOString(),
+        to: calendarFinishTime,
+        from: calendarFrom,
       });
     },
   },

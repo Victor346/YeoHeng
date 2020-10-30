@@ -18,7 +18,6 @@
         </span>
       </div>
     </kalendar>
-    <p>{{JSON.stringify(this.events)}}</p>
   </div>
 </template>
 
