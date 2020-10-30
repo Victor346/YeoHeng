@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Buefy from 'buefy';
+import PortalVue from 'portal-vue';
 import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
@@ -11,6 +12,8 @@ Vue.use(Buefy, {
   defaultIconPack: 'mdi',
   defaultContainerElement: '#content',
 });
+
+Vue.use(PortalVue);
 
 new Vue({
   router,
