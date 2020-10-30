@@ -53,18 +53,32 @@ export default {
   },
   methods: {
     handleSubmit(e) {
+      const loadingComponent = this.$buefy.loading.open({
+        container: null,
+      });
       e.preventDefault();
       this.$store.dispatch(AUTHENTICATE_USER, {
         email: this.email,
         password: this.password,
       })
         .then(() => {
+          loadingComponent.close();
           if (this.$store.state.login.error === null) {
             this.$router.push('/events');
           } else {
+            this.error_snackbar();
             console.log(this.$store.state.login.error);
           }
         });
+    },
+    error_snackbar() {
+      this.$buefy.snackbar.open({
+        duration: 3000,
+        message: 'Wrong username or password',
+        type: 'is-danger',
+        position: 'is-top',
+        actionText: 'Ok',
+      });
     },
   },
 };
