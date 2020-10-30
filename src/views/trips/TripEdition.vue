@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2 class="title is-3">
+    <h2 class="title is-3" style="margin-top: 2%;">
       Edit your trip
     </h2>
     <section>
@@ -72,8 +72,11 @@ export default {
 
       const offset = new Date().getTimezoneOffset();
       const calendarFrom = new Date(Date.parse(from) - (offset * 60 * 1000)).toISOString();
+      const timeString = event.time.split(' ');
+      const hours = parseInt(timeString[0], 10) * 3600 * 1000;
+      const minutes = parseInt(timeString[2], 10) * 60 * 1000;
       const calendarFinishTime = new Date(
-        Date.parse(from) + (3 * 3600 * 1000) - (offset * 60 * 1000),
+        Date.parse(from) + (hours + minutes) - (offset * 60 * 1000),
       ).toISOString();
 
       this.events.push({
@@ -84,6 +87,7 @@ export default {
       // TODO: El calendario esta 6 horas adelantado por UTC.
       this.$refs.calendar.$kalendar.addNewEvent({
         ...event,
+        data: event.title,
         to: calendarFinishTime,
         from: calendarFrom,
       });

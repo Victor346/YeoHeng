@@ -1,26 +1,21 @@
 <template>
   <div id="content">
-    <div v-for="event in events" :key="events.indexOf(event)">
+    <div v-for="event in events" :key="events.indexOf(event)" style="border-bottom: solid 1px">
       <div class="card">
         <div class="card-content">
-          <div class="media">
-            <div class="media-left">
-              <figure class="image is-48x48">
-                <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-              </figure>
+          <div class="columns" style="margin-right: 2%; margin-left: 2%;">
+            <div class="column is-19">
+              <NewEventCard :event="event"
+                         :key="event.id"/>
             </div>
-            <div class="media-content">
-              <p class="title is-4">{{event.data}}</p>
-              <p class="subtitle is-6">@johnsmith</p>
-            </div>
-            <div class="media-right">
-              <b-button class="is-success" @click="addEvent(event)">Add</b-button>
+            <div class="column is-2">
+              <b-button class="is-success"
+                        @click="addEvent(event)"
+                        expanded
+                        style="height: 100%;">+</b-button>
             </div>
           </div>
-          <div class="content">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Phasellus nec iaculis mauris.
-            <br>
+          <div class="content" style="margin-top: 7px;">
             <b-datetimepicker
               locale="es-MX"
               placeholder="Click to select..." v-model="event.from"/>
@@ -33,31 +28,79 @@
 </template>
 
 <script>
+import NewEventCard from '@/components/events/NewEventCard.vue';
+import axios from 'axios';
+
 export default {
   name: 'EventScroller',
+  components: { NewEventCard },
+  props: {
+    originalFrom: String,
+  },
   data() {
     return {
-      events: [
-        {
-          from: new Date('2020-11-01T11:00'),
-          data: 'Push Test 1',
-        },
-        {
-          from: new Date('2020-10-31T14:00'),
-          data: 'Push Test 2',
-        },
-        {
-          from: new Date('2020-11-01T14:00'),
-          data: 'Push Test 3',
-        },
-        {
-          from: new Date('2020-11-02T11:00'),
-          data: 'Push Test 4',
-        },
-      ],
+      events: [],
     };
   },
+  mounted() {
+    this.getAllEvents();
+  },
   methods: {
+    getAllEvents() {
+      const loadingComponent = this.$buefy.loading.open({
+        container: null,
+      });
+      const resultList = [];
+      const params = new URLSearchParams();
+      params.append('limit', 50);
+      params.append('offset', 0);
+      params.append('include_private', false);
+      axios.get(`${process.env.VUE_APP_BACKEND_URL}/event`, { params })
+        .then((result) => {
+          result.data.forEach((event) => {
+            resultList.push({
+              // eslint-disable-next-line no-underscore-dangle
+              id: event._id.$oid,
+              title: event.name,
+              price: event.price,
+              city: event.city,
+              country: event.country,
+              time: event.duration,
+              imgUrl: event.image,
+              description: event.description,
+              category: event.personal_type,
+              tags: event.tags,
+              from: this.originalFrom,
+            });
+          });
+          params.delete('include_private');
+          params.append('include_private', true);
+          params.append('user_id', this.$store.state.login.id);
+
+          axios.get(`${process.env.VUE_APP_BACKEND_URL}/event`, { params })
+            .then((privateResult) => {
+              privateResult.data.forEach((event) => {
+                if (event.private) { return; }
+                resultList.unshift({
+                  // eslint-disable-next-line no-underscore-dangle
+                  id: event._id.$oid,
+                  title: event.name,
+                  price: event.price,
+                  city: event.city,
+                  country: event.country,
+                  time: event.duration,
+                  imgUrl: event.image,
+                  description: event.description,
+                  category: event.personal_type,
+                  tags: event.tags,
+                  from: this.originalFrom,
+                });
+              });
+              this.events = resultList;
+              loadingComponent.close();
+            });
+        });
+    },
     addEvent(event) {
       this.$emit('push-event', event);
       this.events.splice(this.events.indexOf(event), 1);

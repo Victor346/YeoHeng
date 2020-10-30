@@ -3,18 +3,20 @@
     <b-pagination
       :total="total"
       v-model="current"
-      order=""
-      size=""
+      :per-page="perPage"
     >
     </b-pagination>
   <div class="cardContainer" >
-    <TripCard v-for="(trip, i) in items" :key="trip.id + 'My' + i" :trip="trip"></TripCard>
+    <TripCard v-for="(trip, i) in items"
+              :key="trip.id + 'My' + i"
+              :trip="trip"></TripCard>
   </div>
   </div>
 </template>
 
 <script>
 import TripCard from '@/components/trip/TripCard.vue';
+import axios from 'axios';
 
 export default {
   name: 'TripCardScroller',
@@ -26,38 +28,69 @@ export default {
   },
   data() {
     return {
-      total: 200,
+      total: 0,
       current: 1,
-      perPage: 10,
-      items: [
-        {
-          id: 'gdsafgsdf34fgsa',
-          name: 'Mi Viaje Chidori',
-          start_date: '2020-03-30',
-          end_date: '2020-04-15',
-          budget: 4353.34,
-          destination: 'Paris, France',
-          events: [{
-            id: '3fsa53f3',
-            event_id: 'fgerwq24',
-            start_date: '2020-04-15',
-            start_hour: '15:30',
-            duration: 424,
-          }],
-        },
-      ],
+      perPage: 9,
+      items: [],
     };
   },
+  async mounted() {
+    this.retrieveCount();
+  },
   methods: {
-    infiniteHandler($state) {
-      if (this.items.length > 50) { $state.loaded(); return; }
-      this.items.slice(0, 5).forEach((event) => {
-        this.items.push(event);
+    retrieveCount() {
+      const loadingComponent = this.$buefy.loading.open({
+        container: this.$refs.container,
       });
-      console.log(this.items);
-      console.log('Touched bottom');
-      $state.loaded();
-      // $state.complete();
+      const params = new URLSearchParams();
+      params.append('limit', 1000000);
+      params.append('offset', 0);
+      if (this.type === 'PERSONAL') {
+        params.append('user_id', this.$store.state.login.id);
+      }
+      axios.get(`${process.env.VUE_APP_BACKEND_URL}/trip/count`, { params })
+        .then((res) => {
+          console.log(res);
+          this.total = res.data.event_count;
+          this.retrieveItems(loadingComponent);
+        });
+    },
+    retrieveItems(loadingElement) {
+      const params = new URLSearchParams();
+      params.append('limit', this.perPage);
+      params.append('offset', (this.perPage * (this.current - 1)).toString());
+      if (this.type === 'PERSONAL') {
+        params.append('user_id', this.$store.state.login.id);
+      }
+      axios.get(`${process.env.VUE_APP_BACKEND_URL}/trip`, { params })
+        .then((res) => {
+          this.items = [];
+          res.data.forEach((trip) => {
+            const tempItem = {
+              // eslint-disable-next-line no-underscore-dangle
+              id: trip._id.$oid,
+              name: trip.name,
+              start_date: trip.start_date,
+              end_date: trip.start_date,
+              budget: trip.budget,
+              destination: trip.destination,
+              events: [],
+            };
+            trip.events.forEach((event) => {
+              tempItem.events.push({
+                // eslint-disable-next-line no-underscore-dangle
+                id: event._id.$oid,
+                event_id: event.event_id.$oid,
+                start_date: event.start_date,
+                start_hour: event.start_hour,
+                duration: event.duration,
+              });
+            });
+            this.items.push(tempItem);
+          });
+          loadingElement.close();
+          console.log(res);
+        });
     },
   },
   watch: {
@@ -66,9 +99,8 @@ export default {
       const loadingComponent = this.$buefy.loading.open({
         container: this.$refs.container,
       });
-      setTimeout(() => loadingComponent.close(), 3 * 1000);
       console.log(page);
-      return 100 - page;
+      this.retrieveItems(loadingComponent);
     },
   },
 };
