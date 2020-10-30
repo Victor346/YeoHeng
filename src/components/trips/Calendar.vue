@@ -41,7 +41,7 @@ export default {
         scrollToNow: true,
         start_day: new Date().toISOString(),
         read_only: true,
-        day_starts_at: 7,
+        day_starts_at: 0,
         day_ends_at: 24,
         overlap: false,
         hide_dates: ['2019-10-31'], // Spooky
