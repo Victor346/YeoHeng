@@ -34,12 +34,16 @@
         </div>
         <div class="content has-text-left columns">
           <div class="column">
-            <p><b class="is-size-5">Budget:</b> ${{trip.budget}}</p>
-            <p><b class="is-size-5">Start:</b> {{trip.start_date}}</p>
+            <p><b class="is-size-6">Budget:</b> ${{trip.budget}}</p>
+            <p><b class="is-size-6">Start:</b>
+              {{new Date(trip.start_date).toDateString()}}
+            </p>
           </div>
           <div class="column">
-            <p><b class="is-size-5"># of events:</b> {{trip.events.length}}</p>
-            <p><b class="is-size-5">End:</b> {{trip.end_date}}</p>
+            <p><b class="is-size-6"># of events:</b> {{trip.events.length}}</p>
+            <p><b class="is-size-6">End:</b>
+              {{new Date(trip.end_date).toDateString()}}
+            </p>
           </div>
         </div>
       </div>
