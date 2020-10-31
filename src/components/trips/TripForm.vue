@@ -58,6 +58,12 @@
 <script>
 export default {
   name: 'TripForm',
+  props: {
+    initialName: String,
+  },
+  mounted() {
+    this.name = this.initialName;
+  },
   data() {
     const currentDate = new Date();
     const endDate = new Date();
@@ -67,7 +73,7 @@ export default {
     minDate.setFullYear(minDate.getFullYear() - 1);
     maxDate.setFullYear(maxDate.getFullYear() + 2);
     return {
-      name: null,
+      name: this.initialName,
       startDate: currentDate,
       endDate,
       minDate,

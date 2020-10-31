@@ -1,30 +1,55 @@
 <template>
-  <div id="content">
-    <div v-for="event in events" :key="events.indexOf(event)" style="border-bottom: solid 1px">
-      <div class="card">
-        <div class="card-content">
-          <div class="columns" style="margin-right: 2%; margin-left: 2%;">
-            <div class="column is-19">
-              <NewEventCard :event="event"
-                         :key="event.id"/>
+  <div>
+    <div id="filters">
+      <h4 class="title is-4">Filtros</h4>
+      <div class="has-text-left">
+        <b-field label="Tags">
+          <b-taginput
+            v-model="tags"
+            type="is-danger">
+          </b-taginput>
+        </b-field>
+
+        <b-field label="Category">
+          <b-select v-model="category" placeholder="Select a category">
+            <option
+              v-for="option in categories"
+              :value="option.name"
+              :key="option.id"
+            >
+              {{ option.name }}
+            </option>
+          </b-select>
+        </b-field>
+        <b-button type="is-primary" @click="getAllEvents">Apply Filters</b-button>
+      </div>
+    </div>
+    <div id="content">
+      <div v-for="event in events" :key="events.indexOf(event)" style="border-bottom: solid 1px">
+        <div class="card">
+          <div class="card-content">
+            <div class="columns" style="margin-right: 2%; margin-left: 2%;">
+              <div class="column is-19">
+                <NewEventCard :event="event"
+                           :key="event.id"/>
+              </div>
+              <div class="column is-2">
+                <b-button class="is-success"
+                          @click="addEvent(event)"
+                          expanded
+                          style="height: 100%;">+</b-button>
+              </div>
             </div>
-            <div class="column is-2">
-              <b-button class="is-success"
-                        @click="addEvent(event)"
-                        expanded
-                        style="height: 100%;">+</b-button>
+            <div class="content" style="margin-top: 7px;">
+              <b-datetimepicker
+                locale="es-MX"
+                placeholder="Click to select..." v-model="event.from"/>
             </div>
-          </div>
-          <div class="content" style="margin-top: 7px;">
-            <b-datetimepicker
-              locale="es-MX"
-              placeholder="Click to select..." v-model="event.from"/>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -36,10 +61,32 @@ export default {
   components: { NewEventCard },
   props: {
     originalFrom: String,
+    city: String,
+    country: String,
   },
   data() {
     return {
       events: [],
+      tags: [],
+      category: null,
+      categories: [
+        {
+          name: '',
+          id: 0,
+        },
+        {
+          name: 'Culture',
+          id: 1,
+        },
+        {
+          name: 'Sports',
+          id: 2,
+        },
+        {
+          name: 'Food',
+          id: 3,
+        },
+      ],
     };
   },
   mounted() {
@@ -54,6 +101,15 @@ export default {
       const params = new URLSearchParams();
       params.append('limit', 50);
       params.append('offset', 0);
+      params.append('country', this.country);
+      params.append('city', this.city);
+      if (this.tags.length > 0) {
+        params.append('tags', this.tags.join());
+      }
+      if (this.category !== null && this.category !== '') {
+        params.append('personal_type', this.category);
+      }
+      console.log(params.toString());
       params.append('include_private', false);
       axios.get(`${process.env.VUE_APP_BACKEND_URL}/event`, { params })
         .then((result) => {
@@ -103,7 +159,16 @@ export default {
     },
     addEvent(event) {
       this.$emit('push-event', event);
-      this.events.splice(this.events.indexOf(event), 1);
+    },
+  },
+  watch: {
+    city() {
+      if (this.country === null) { return; }
+      this.getAllEvents();
+    },
+    country() {
+      if (this.city === null) { return; }
+      this.getAllEvents();
     },
   },
 };
@@ -113,5 +178,13 @@ export default {
 #content {
   height: 800px;
   overflow: auto;
+  border-radius: 4px;
+}
+#filters {
+  background-color: white;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  margin-top: 2rem;
+  padding: 0.5rem;
 }
 </style>
