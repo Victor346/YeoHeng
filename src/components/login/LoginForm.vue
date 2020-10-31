@@ -67,7 +67,6 @@ export default {
             this.$router.push('/events');
           } else {
             this.error_snackbar();
-            console.log(this.$store.state.login.error);
           }
         });
     },

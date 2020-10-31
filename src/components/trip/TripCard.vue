@@ -1,5 +1,5 @@
 <template>
-  <div style="min-width: 32%; margin-bottom: 10px">
+  <div v-on:click="handleClick" style="min-width: 32%; margin-bottom: 10px">
     <div class="card">
       <div
         class="card-image is-hidden-mobile"
@@ -59,6 +59,7 @@ export default {
     this.imgUrl = 'https://media1.tenor.com/images/a8b6a5195b658b2e8882383e44083023/tenor.gif?itemid=18439707';
   },
   props: {
+    type: String,
     trip: {
       id: String,
       name: String,
@@ -77,7 +78,12 @@ export default {
   },
   methods: {
     retrieveImg() {
-      console.log('hola');
+      console.log('');
+    },
+    handleClick() {
+      if (this.type === 'PERSONAL') {
+        this.$router.push(`/trip/edit/${this.trip.id}`);
+      }
     },
   },
 };

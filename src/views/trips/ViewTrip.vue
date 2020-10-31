@@ -1,14 +1,16 @@
 <template>
   <div>
     <div class="has-text-left">
-      <h1 class="title is-2" id="main-title">My Trips</h1>
+      <h1 class="title is-2" id="main-title">Trips</h1>
     </div>
-    <div class="has-text-left" style="margin-top: 25px; margin-left: 5%;">
+    <div v-if="this.$store.state.login.token != null"
+         class="has-text-left"
+         style="margin-top: 25px; margin-left: 5%;">
       <b-button type="is-success" @click="isComponentModalActive = true">
         Register a new trip
       </b-button>
       <b-modal v-model="isComponentModalActive">
-        <form action="" >
+        <form @submit.prevent="handleRegister" >
           <div class="modal-card" style="width: auto; height: 90%;">
             <header class="modal-card-head">
               <p class="modal-card-title">Register new trip</p>
@@ -28,14 +30,18 @@
                   <b-field label="Start Date">
                     <b-datepicker
                       placeholder="Click to select..."
-                      v-model="startDate">
+                      v-model="startDate"
+                      style="z-index: 100;"
+                      required>
                     </b-datepicker>
                   </b-field>
 
                   <b-field label="End Date">
                     <b-datepicker
                       placeholder="Click to select..."
-                      v-model="endDate">
+                      v-model="endDate"
+                      style="z-index: 99;"
+                      required>
                     </b-datepicker>
                   </b-field>
                 </div>
@@ -54,34 +60,28 @@
                       </template>
                     </b-autocomplete>
                   </b-field>
-                  <b-field label="Price (USD)">
-                    <b-input
-                      v-model="price"
-                      placeholder="00.00"
-                      icon="currency-usd"
-                      type="number"
-                      min="0"
-                      step=".01"
-                      required
-                    ></b-input>
-                  </b-field>
+                  <b-switch v-model="isPrivate" style="margin-top: 5px;">
+                    Make this trip private
+                  </b-switch>
                 </div>
               </div>
             </section>
             <footer class="modal-card-foot">
-              <button class="button" type="button" @click="$emit('close')">Close</button>
-              <button class="button is-primary">Register</button>
+              <button class="button is-primary" type="submit">Register</button>
             </footer>
           </div>
         </form>
       </b-modal>
     </div>
     <b-tabs size="is-medium" type="is-boxed" class="block" id="tab-container">
-      <b-tab-item label="My Trips" icon="google-photos" class="tab-content">
-        <TripCardScroller type="PERSONAL"></TripCardScroller>
+      <b-tab-item label="My Trips"
+                  icon="google-photos"
+                  class="tab-content"
+                  v-if="this.$store.state.login.token != null">
+        <TripCardScroller :trigger="trigger" type="PERSONAL"></TripCardScroller>
       </b-tab-item>
       <b-tab-item label="All Trips" icon="google-photos">
-        <TripCardScroller type="ALL"></TripCardScroller>
+        <TripCardScroller :trigger="trigger" type="ALL"></TripCardScroller>
       </b-tab-item>
     </b-tabs>
   </div>
@@ -90,6 +90,7 @@
 <script>
 import TripCardScroller from '@/components/trip/TripCardScroller.vue';
 import GoogleMapsApiLoader from 'google-maps-api-loader';
+import axios from 'axios';
 
 export default {
   name: 'ViewTrip',
@@ -105,7 +106,8 @@ export default {
       suggestions: [],
       startDate: null,
       endDate: null,
-      price: null,
+      isPrivate: false,
+      trigger: 0,
     };
   },
   async mounted() {
@@ -117,6 +119,22 @@ export default {
     this.google = googleMapApi;
   },
   methods: {
+    success_snackbar() {
+      this.$buefy.snackbar.open({
+        message: 'Your trip has been registered successfully',
+        position: 'is-top',
+      });
+    },
+    error_snackbar() {
+      this.$buefy.snackbar.open({
+        duration: 10000,
+        message: 'An error has ocurred while registering your trip',
+        type: 'is-danger',
+        position: 'is-top',
+        actionText: 'Retry',
+        onAction: () => this.handleSubmit(),
+      });
+    },
     getApiResults(input) {
       const request = {
         input,
@@ -124,7 +142,6 @@ export default {
       };
       const service = new this.google.maps.places.AutocompleteService();
       service.getPlacePredictions(request, (predictions, status) => {
-        console.log(predictions);
         console.log(status);
         this.suggestions = [];
         predictions.forEach((prediction) => {
@@ -136,6 +153,43 @@ export default {
           });
         });
       });
+    },
+    handleRegister() {
+      const loadingComponent = this.$buefy.loading.open({
+        container: this.$refs.container,
+      });
+      const data = {
+        name: this.name,
+        start_date: new Date(this.startDate.setUTCHours(0, 0, 0, 0)).toISOString(),
+        end_date: new Date(this.endDate.setUTCHours(0, 0, 0, 0)).toISOString(),
+        budget: 0,
+        destination: `${this.selectedCity.city}, ${this.selectedCity.country}`,
+        private: this.isPrivate,
+        user_id: this.$store.state.login.id,
+      };
+
+      const config = {
+        method: 'post',
+        url: `${process.env.VUE_APP_BACKEND_URL}/trip`,
+        headers: {
+          Authorization: `Bearer ${this.$store.state.login.token}`,
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify(data),
+      };
+
+      axios(config)
+        .then(() => {
+          this.isComponentModalActive = false;
+          loadingComponent.close();
+          this.trigger = Math.random();
+          this.success_snackbar();
+        })
+        .catch(() => {
+          this.isComponentModalActive = false;
+          loadingComponent.close();
+          this.error_snackbar();
+        });
     },
   },
 };

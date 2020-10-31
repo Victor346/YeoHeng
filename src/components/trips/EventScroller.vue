@@ -122,7 +122,6 @@ export default {
       if (this.category !== null && this.category !== '') {
         params.append('personal_type', this.category);
       }
-      console.log(params.toString());
       params.append('include_private', false);
       axios.get(`${process.env.VUE_APP_BACKEND_URL}/event`, { params })
         .then((result) => {

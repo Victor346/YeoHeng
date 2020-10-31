@@ -9,7 +9,8 @@
   <div class="cardContainer" >
     <TripCard v-for="(trip, i) in items"
               :key="trip.id + 'My' + i"
-              :trip="trip"></TripCard>
+              :trip="trip"
+              :type="type"></TripCard>
   </div>
   </div>
 </template>
@@ -25,6 +26,7 @@ export default {
   },
   props: {
     type: String,
+    trigger: Number,
   },
   data() {
     return {
@@ -50,7 +52,6 @@ export default {
       }
       axios.get(`${process.env.VUE_APP_BACKEND_URL}/trip/count`, { params })
         .then((res) => {
-          console.log(res);
           this.total = res.data.event_count;
           this.retrieveItems(loadingComponent);
         });
@@ -89,18 +90,18 @@ export default {
             this.items.push(tempItem);
           });
           loadingElement.close();
-          console.log(res);
         });
     },
   },
   watch: {
-    current(val) {
-      const page = val;
+    current() {
       const loadingComponent = this.$buefy.loading.open({
         container: this.$refs.container,
       });
-      console.log(page);
       this.retrieveItems(loadingComponent);
+    },
+    trigger() {
+      this.retrieveCount();
     },
   },
 };

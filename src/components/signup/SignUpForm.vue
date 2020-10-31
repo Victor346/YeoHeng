@@ -115,7 +115,6 @@ export default {
               message = 'An user with the same email or username already exists';
             }
             this.error_snackbar(message);
-            console.log(this.$store.state.login.error);
           }
         });
     },
