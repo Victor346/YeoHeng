@@ -47,7 +47,7 @@ Then('I verify demo cards are correct', () => {
   let i = 2;
   const cypressCardCss = `:nth-child(${i}) > .card > .card-content >`;
 
-  cy.get(cypressCardCss + ' .media > .media-content > .title').contains('Uppas');
+  cy.get(cypressCardCss + ' .media > .media-content > .title').contains('pepe');
   cy.get(cypressCardCss + ' .media > .media-content > .subtitle').contains('Vatican');
   cy.get(cypressCardCss + ' .content > p').contains('pepe');
   cy.get(cypressCardCss + ' .content > .tags > :nth-child(1) > span').contains('BTS');
