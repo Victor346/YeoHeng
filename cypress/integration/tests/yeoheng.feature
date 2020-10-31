@@ -11,6 +11,7 @@ Feature: Yeoheng
   Scenario: Login
     Given I am on the login page
     Then I login with test credentials
+    Given I am on the events page
     Then I verify event titles are correct
     Then I verify demo cards are correct
 
