@@ -24,6 +24,17 @@
         <b-button type="is-primary" @click="getAllEvents">Apply Filters</b-button>
       </div>
     </div>
+    <b-button type="is-success" expanded style="margin-bottom: 15px;"
+              @click="isComponentModalActive = true">
+      Add a new Event
+    </b-button>
+    <b-modal v-model="isComponentModalActive">
+      <EventCreation
+        :should-stay="true"
+        :handle-close="handleClose"
+        style="background-color: #e3e3e3; padding: 15px; border-radius: 5px;"
+      />
+    </b-modal>
     <div id="content">
       <div v-for="event in events" :key="events.indexOf(event)" style="border-bottom: solid 1px">
         <div class="card">
@@ -54,11 +65,12 @@
 
 <script>
 import NewEventCard from '@/components/events/NewEventCard.vue';
+import EventCreation from '@/views/events/EventCreation.vue';
 import axios from 'axios';
 
 export default {
   name: 'EventScroller',
-  components: { NewEventCard },
+  components: { NewEventCard, EventCreation },
   props: {
     originalFrom: String,
     city: String,
@@ -68,6 +80,7 @@ export default {
     return {
       events: [],
       tags: [],
+      isComponentModalActive: false,
       category: null,
       categories: [
         {
@@ -109,7 +122,6 @@ export default {
       if (this.category !== null && this.category !== '') {
         params.append('personal_type', this.category);
       }
-      console.log(params.toString());
       params.append('include_private', false);
       axios.get(`${process.env.VUE_APP_BACKEND_URL}/event`, { params })
         .then((result) => {
@@ -136,7 +148,7 @@ export default {
           axios.get(`${process.env.VUE_APP_BACKEND_URL}/event`, { params })
             .then((privateResult) => {
               privateResult.data.forEach((event) => {
-                if (event.private) { return; }
+                if (!event.private) { return; }
                 resultList.unshift({
                   // eslint-disable-next-line no-underscore-dangle
                   id: event._id.$oid,
@@ -159,6 +171,10 @@ export default {
     },
     addEvent(event) {
       this.$emit('push-event', event);
+    },
+    handleClose() {
+      this.isComponentModalActive = false;
+      this.getAllEvents();
     },
   },
   watch: {

@@ -19,7 +19,7 @@
                   <div class="column">
                     <b-field label="Start Date">
                       <b-datepicker
-                        style="z-index: 50;"
+                        style="z-index: 21;"
                         placeholder="Click to select..."
                         v-model="startDate"
                         :min-date="minDate"
@@ -30,7 +30,7 @@
                   <div class="column">
                     <b-field label="End Date">
                       <b-datepicker
-                        style="z-index: 50;"
+                        style="z-index: 21;"
                         placeholder="Click to select..."
                         v-model="endDate"
                         :min-date="startDate"
@@ -122,10 +122,8 @@ export default {
     const loadingComponent = this.$buefy.loading.open({
       container: this.$refs.container,
     });
-    console.log(this.$route.params.id);
     axios.get(`${process.env.VUE_APP_BACKEND_URL}/trip/${this.$route.params.id}`)
       .then((res) => {
-        console.log(res);
         this.country = res.data.destination.split(',')[1].trim();
         this.city = res.data.destination.split(',')[0].trim();
         this.name = res.data.name;
@@ -209,7 +207,6 @@ export default {
         private: this.isPrivate,
         budget: parseInt(this.price, 10),
       };
-      console.log(data);
       axios.put(`${process.env.VUE_APP_BACKEND_URL}/trip`, data, {
         headers: {
           Authorization: `Bearer ${this.$store.state.login.token}`,
@@ -217,6 +214,12 @@ export default {
       })
         .then(() => {
           loadingComponent.close();
+          this.$buefy.snackbar.open({
+            duration: 10000,
+            message: 'Changes to trip saved successfully',
+            position: 'is-top',
+            actionText: 'Ok',
+          });
         })
         .catch(() => {
           loadingComponent.close();

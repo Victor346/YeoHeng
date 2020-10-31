@@ -158,6 +158,10 @@ export default {
       ],
     };
   },
+  props: {
+    shouldStay: Boolean,
+    handleClose: Function,
+  },
   async mounted() {
     const apiKey = process.env.VUE_APP_GOOGLE_API_KEY;
     const googleMapApi = await GoogleMapsApiLoader({
@@ -190,7 +194,6 @@ export default {
       };
       const service = new this.google.maps.places.AutocompleteService();
       service.getPlacePredictions(request, (predictions, status) => {
-        console.log(predictions);
         console.log(status);
         this.suggestions = [];
         predictions.forEach((prediction) => {
@@ -218,17 +221,14 @@ export default {
         .then((response) => {
           const presignedUrl = response.data.presigned_url;
           const publicUrl = response.data.public_url;
-          console.log(publicUrl);
           const options = {
             headers: {
               'Content-Type': this.file.type,
             },
           };
 
-          console.log(options);
-
           axios.put(presignedUrl, this.file, options)
-            .then((result) => {
+            .then(() => {
               const params = {
                 name: this.name,
                 description: this.description,
@@ -242,7 +242,6 @@ export default {
                 price: parseFloat(this.price),
                 duration: `${this.hour} hour(s) ${this.minutes} minute(s)`,
               };
-              console.log(JSON.stringify(params));
               const config = {
                 method: 'post',
                 url: `${process.env.VUE_APP_BACKEND_URL}/event/create`,
@@ -252,19 +251,19 @@ export default {
                 },
                 data: JSON.stringify(params),
               };
-              console.log(config);
 
               axios(config)
-                .then((res) => {
-                  this.$router.push('/events');
+                .then(() => {
+                  if (this.shouldStay === false) {
+                    this.$router.push('/events');
+                  } else {
+                    this.handleClose();
+                  }
                   this.success_snackbar();
-                  console.log(res);
                 })
                 .catch(() => {
                   this.error_snackbar();
                 });
-
-              console.log(result);
             })
             .catch(() => {
               this.error_snackbar();
