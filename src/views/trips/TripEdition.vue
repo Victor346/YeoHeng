@@ -19,7 +19,7 @@
                   <div class="column">
                     <b-field label="Start Date">
                       <b-datepicker
-                        style="z-index: 50;"
+                        style="z-index: 21;"
                         placeholder="Click to select..."
                         v-model="startDate"
                         :min-date="minDate"
@@ -30,7 +30,7 @@
                   <div class="column">
                     <b-field label="End Date">
                       <b-datepicker
-                        style="z-index: 50;"
+                        style="z-index: 21;"
                         placeholder="Click to select..."
                         v-model="endDate"
                         :min-date="startDate"
@@ -217,6 +217,12 @@ export default {
       })
         .then(() => {
           loadingComponent.close();
+          this.$buefy.snackbar.open({
+            duration: 10000,
+            message: 'Changes to trip saved successfully',
+            position: 'is-top',
+            actionText: 'Ok',
+          });
         })
         .catch(() => {
           loadingComponent.close();
