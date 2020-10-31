@@ -194,6 +194,7 @@ export default {
       };
       const service = new this.google.maps.places.AutocompleteService();
       service.getPlacePredictions(request, (predictions, status) => {
+        console.log(status);
         this.suggestions = [];
         predictions.forEach((prediction) => {
           this.suggestions.push({
@@ -227,7 +228,7 @@ export default {
           };
 
           axios.put(presignedUrl, this.file, options)
-            .then((result) => {
+            .then(() => {
               const params = {
                 name: this.name,
                 description: this.description,
@@ -252,7 +253,7 @@ export default {
               };
 
               axios(config)
-                .then((res) => {
+                .then(() => {
                   if (this.shouldStay === false) {
                     this.$router.push('/events');
                   } else {
@@ -263,7 +264,6 @@ export default {
                 .catch(() => {
                   this.error_snackbar();
                 });
-
             })
             .catch(() => {
               this.error_snackbar();
