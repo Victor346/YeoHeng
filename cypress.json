@@ -1,0 +1,11 @@
+{
+  "chromeWebSecurity": false,
+  "defaultCommandTimeout": 6000,
+  "env": {
+    "baseUrl": "http://localhost:8080/",
+    "username": "test@test.com",
+    "password": "test"
+  },
+  "video": false,
+  "watchForFileChanges": false
+}
