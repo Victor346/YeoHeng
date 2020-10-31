@@ -53,7 +53,7 @@ const routes = [
     component: ViewTrip,
   },
   {
-    path: '/trip/edit',
+    path: '/trip/edit/:id',
     name: 'Edit Trip',
     component: TripEdition,
     meta: { requiresAuthentication: true },

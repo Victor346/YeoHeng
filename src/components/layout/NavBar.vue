@@ -39,12 +39,6 @@
         tag="router-link"
         :to="{ path: '/trips' }"
       >Trips</b-navbar-item>
-      <b-navbar-item
-        tag="router-link"
-        :to="{ path: '/trip/edit' }"
-      >
-        Edit Trip
-      </b-navbar-item>
     </template>
 
     <template slot="end">

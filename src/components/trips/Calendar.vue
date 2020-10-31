@@ -59,7 +59,7 @@ export default {
   padding: 20px;
 }
 .sticky-top {
-  z-index: 0 !important;
+  z-index: 1 !important;
 }
 .overflow {
   /* overflow: scroll; */
