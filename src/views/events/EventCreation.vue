@@ -158,6 +158,10 @@ export default {
       ],
     };
   },
+  props: {
+    shouldStay: Boolean,
+    handleClose: Function,
+  },
   async mounted() {
     const apiKey = process.env.VUE_APP_GOOGLE_API_KEY;
     const googleMapApi = await GoogleMapsApiLoader({
@@ -256,7 +260,11 @@ export default {
 
               axios(config)
                 .then((res) => {
-                  this.$router.push('/events');
+                  if (this.shouldStay === false) {
+                    this.$router.push('/events');
+                  } else {
+                    this.handleClose();
+                  }
                   this.success_snackbar();
                   console.log(res);
                 })

@@ -29,7 +29,11 @@
       Add a new Event
     </b-button>
     <b-modal v-model="isComponentModalActive">
-      <EventCreation style="background-color: #e3e3e3; padding: 15px; border-radius: 5px;"/>
+      <EventCreation
+        :should-stay="true"
+        :handle-close="handleClose"
+        style="background-color: #e3e3e3; padding: 15px; border-radius: 5px;"
+      />
     </b-modal>
     <div id="content">
       <div v-for="event in events" :key="events.indexOf(event)" style="border-bottom: solid 1px">
@@ -168,6 +172,10 @@ export default {
     },
     addEvent(event) {
       this.$emit('push-event', event);
+    },
+    handleClose() {
+      this.isComponentModalActive = false;
+      this.getAllEvents();
     },
   },
   watch: {
