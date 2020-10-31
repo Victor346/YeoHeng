@@ -76,7 +76,9 @@ export default {
     },
   },
   methods: {
-
+    retrieveImg() {
+      console.log('hola');
+    },
   },
 };
 </script>

@@ -88,6 +88,7 @@ export default {
       const params = new URLSearchParams();
       params.append('limit', this.limit);
       params.append('offset', this.offset);
+      params.append('include_private', false);
 
       axios.get(`${process.env.VUE_APP_BACKEND_URL}/event`, { params })
         .then((result) => {
@@ -142,6 +143,7 @@ export default {
         privateParams.append('limit', this.privateLimit);
         privateParams.append('offset', this.privateOffset);
         privateParams.append('user_id', this.$store.state.login.id);
+        privateParams.append('include_private', true);
 
         axios.get(`${process.env.VUE_APP_BACKEND_URL}/event`, { params: privateParams })
           .then((res) => {

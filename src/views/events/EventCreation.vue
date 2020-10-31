@@ -98,7 +98,9 @@
             </span>
               </b-upload>
             </b-field>
-
+            <b-switch v-model="isPrivate" style="margin-top: 5px;">
+              Make this event private
+            </b-switch>
           </div>
         </div>
         <div class="columns is-centered">
@@ -128,6 +130,7 @@ export default {
   data() {
     return {
       selectedCity: null,
+      isPrivate: false,
       name: '',
       hour: 0,
       minutes: 0,
@@ -234,7 +237,8 @@ export default {
                 city: this.selectedCity.city,
                 image: publicUrl,
                 tags: this.tags,
-                user_id: this.$store.state.login.id,
+                private: this.isPrivate,
+                user_id: { $oid: this.$store.state.login.id },
                 price: parseFloat(this.price),
                 duration: `${this.hour} hour(s) ${this.minutes} minute(s)`,
               };
