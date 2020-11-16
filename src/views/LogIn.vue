@@ -32,6 +32,7 @@
 
 <script>
 import LoginForm from '@/components/login/LoginForm.vue';
+import { LOGIN_SUCCESS } from '@/store/mutations/types';
 
 export default {
   name: 'LogIn',
@@ -51,6 +52,13 @@ export default {
       console.log(`Name: ${profile.getName()}`);
       console.log(`Image URL: ${profile.getImageUrl()}`);
       console.log(`Email: ${profile.getEmail()}`); // This is null if the 'email' scope is not present.
+      this.$store.commit(LOGIN_SUCCESS, {
+        username: profile.getName(),
+        token: 'TODOGoogle',
+        id: 'TODOGoogleID',
+        provider: 'Google',
+      });
+      this.$router.push('/events');
     },
   },
 };

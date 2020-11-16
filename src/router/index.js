@@ -10,6 +10,8 @@ import ViewEvent from '@/views/events/ViewEvent.vue';
 import ViewTrip from '@/views/trips/ViewTrip.vue';
 import TripEdition from '@/views/trips/TripEdition.vue';
 
+import { LOGOUT } from '@/store/mutations/types';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -69,7 +71,14 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuthentication)) {
     if (store.state.login.username !== null && store.state.login.token !== null) {
-      next();
+      if (store.state.login.provider === 'YeoHeng') { next(); }
+      if (store.state.login.provider === 'Google') {
+        // eslint-disable-next-line no-undef
+        if (GoogleAuth.isSignedIn.get()) { next(); } else {
+          store.commit(LOGOUT);
+          next({ name: 'Login' });
+        }
+      }
     } else {
       next({ name: 'Login' });
     }

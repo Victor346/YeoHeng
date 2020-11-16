@@ -29,6 +29,13 @@ export default {
   },
   methods: {
     clickMe() {
+      if (this.$store.state.login.provider === 'Google') {
+        // eslint-disable-next-line no-undef
+        const auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(() => {
+          console.log('User signed out.');
+        });
+      }
       this.$store.commit(LOGOUT);
       router.push('/');
     },
