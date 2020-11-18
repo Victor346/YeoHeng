@@ -43,6 +43,14 @@
             >
               {{tag}}
             </b-tag>
+            <b-button
+              v-if="isOwned"
+              icon-right="image-edit"
+              tag="router-link"
+              :to="route"
+            >
+              Edit
+            </b-button>
           </b-taglist>
         </div>
         <footer class="card-footer">
@@ -54,15 +62,22 @@
           </p>
         </footer>
       </div>
-  </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'EventCard',
+  data() {
+    return {
+      route: `event/edit/${this.event.id}`,
+    };
+  },
   props: {
+    isOwned: Boolean,
     event: {
+      id: String,
       title: String,
       price: String,
       city: String,
