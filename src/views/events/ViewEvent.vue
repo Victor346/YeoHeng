@@ -1,33 +1,36 @@
 <template>
   <div>
     <div v-if="this.$store.state.login.token != null">
-    <section class="has-text-left" style="padding-top: 0;">
-      <div class="has-text-left">
-        <h1 class="title is-2">My events</h1>
-      </div>
-      <div  style="margin-top: 10px;">
-        <b-button tag="router-link" to="/event/new" type="is-success">
-          Register a new event
-        </b-button>
-        <b-button @click="getPrivateEvents('PREVIOUS')"
-                  style="margin-left: 4px;" icon-left="arrow-left">
-        </b-button>
-        <b-button @click="getPrivateEvents('NEXT')"
-                  style="margin-left: 4px;" icon-left="arrow-right">
-        </b-button>
-      </div>
-    </section>
-    <section>
-      <div class="columns" style="flex-wrap: wrap">
-        <EventCard v-for="privateEvent in privateEvents" :event="privateEvent"
-                   :key="privateEvents.indexOf(privateEvent)"/>
-        <div v-if="privateEvents.length === 0" class="container" style="margin-top: 15px;
-             margin-bottom: 15px;">
-          <h4 class="title is-4">
-            You have not registered any event yet</h4>
+      <section class="has-text-left" style="padding-top: 0;">
+        <div class="has-text-left">
+          <h1 class="title is-2">My events</h1>
         </div>
-      </div>
-    </section>
+        <div  style="margin-top: 10px;">
+          <b-button tag="router-link" to="/event/new" type="is-success">
+            Register a new event
+          </b-button>
+          <b-button @click="getPrivateEvents('PREVIOUS')"
+                    style="margin-left: 4px;" icon-left="arrow-left">
+          </b-button>
+          <b-button @click="getPrivateEvents('NEXT')"
+                    style="margin-left: 4px;" icon-left="arrow-right">
+          </b-button>
+        </div>
+      </section>
+      <section>
+        <div class="columns" style="flex-wrap: wrap">
+          <EventCard v-for="privateEvent in privateEvents"
+                     :is-owned="true"
+                     :event="privateEvent"
+                     :key="privateEvents.indexOf(privateEvent)"
+          />
+          <div v-if="privateEvents.length === 0" class="container" style="margin-top: 15px;
+               margin-bottom: 15px;">
+            <h4 class="title is-4">
+              You have not registered any event yet</h4>
+          </div>
+        </div>
+      </section>
     </div>
     <section class="has-text-left" style="padding-top: 10px;">
       <div class="has-text-left">
@@ -44,7 +47,12 @@
     </section>
     <section>
       <div class="columns" style="flex-wrap: wrap">
-        <EventCard v-for="event in events" :event="event" :key="events.indexOf(event)"/>
+        <EventCard
+          v-for="event in events"
+          :event="event"
+          :is-owned="false"
+          :key="events.indexOf(event)"
+        />
       </div>
     </section>
   </div>
@@ -96,6 +104,8 @@ export default {
             this.events = [];
             result.data.forEach((event) => {
               this.events.push({
+                // eslint-disable-next-line no-underscore-dangle
+                id: event._id.$oid,
                 title: event.name,
                 price: event.price,
                 city: event.city,
@@ -151,6 +161,8 @@ export default {
               this.privateEvents = [];
               res.data.forEach((event) => {
                 this.privateEvents.push({
+                  // eslint-disable-next-line no-underscore-dangle
+                  id: event._id.$oid,
                   title: event.name,
                   price: event.price,
                   city: event.city,
