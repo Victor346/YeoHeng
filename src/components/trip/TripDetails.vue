@@ -18,7 +18,9 @@
       </div>
     </div>
     <div class="cardContainer">
-      <NewEventCard></NewEventCard>
+      <NewEventCard v-for="(event, i) in events" :event="event"
+                    :key="event.id + 'My' + i"
+                    style="margin-bottom: 10px;"></NewEventCard>
     </div>
   </div>
 </template>
@@ -63,7 +65,23 @@ export default {
         this.budget = data.budget;
         this.destination = data.destination;
         data.events.forEach((event) => {
-          console.log(event);
+          axios.get(`${process.env.VUE_APP_BACKEND_URL}/event/${event.event_id.$oid}`)
+            .then((res) => {
+              const eventRes = res.data;
+              this.events.push({
+                // eslint-disable-next-line no-underscore-dangle
+                id: eventRes._id.$oid,
+                title: eventRes.name,
+                price: eventRes.price,
+                city: eventRes.city,
+                country: eventRes.country,
+                time: eventRes.duration,
+                imgUrl: eventRes.image,
+                description: eventRes.description,
+                category: eventRes.personal_type,
+                tags: eventRes.tags,
+              });
+            });
         });
       });
     },
@@ -78,5 +96,11 @@ export default {
 #tripInfo{
   margin-top: 2%;
   font-size: 18px;
+}
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: space-between;
 }
 </style>
