@@ -20,12 +20,15 @@
                 <h2 class="subtitle is-5">
                   {{carousel.description}}
                 </h2>
+                <h2 class="subtitle is-5">
+                  Budget: ${{carousel.budget}}
+                </h2>
               </div>
             </div>
           </div>
           <div class="column">
             <img
-              :src="carousel.imagePath"
+              :src="require('../../assets/img/paris_home_2.jpg')"
               alt="image"
             >
           </div>
@@ -36,37 +39,33 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'TripCarousel',
   data() {
     return {
-      trips: [
-        {
-          name: 'Trip 1',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-            + 'Nullam ac ultricies risus, eu tincidunt ante. Quisque quis magna nunc. ',
-          imagePath: 'https://picsum.photos/id/4/1230/500',
-        },
-        {
-          name: 'Trip 2',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-            + 'Nullam ac ultricies risus, eu tincidunt ante. Quisque quis magna nunc. ',
-          imagePath: 'https://picsum.photos/id/4/1230/500',
-        },
-        {
-          name: 'Trip 3',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-            + 'Nullam ac ultricies risus, eu tincidunt ante. Quisque quis magna nunc. ',
-          imagePath: 'https://picsum.photos/id/4/1230/500',
-        },
-        {
-          name: 'Trip 4',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-            + 'Nullam ac ultricies risus, eu tincidunt ante. Quisque quis magna nunc. ',
-          imagePath: 'https://picsum.photos/id/4/1230/500',
-        },
-      ],
+      trips: [],
     };
+  },
+  mounted() {
+    axios.get(`${process.env.VUE_APP_BACKEND_URL}/trip`, {
+      params: {
+        offset: 0,
+        limit: 5,
+      },
+    })
+      .then((response) => {
+        response.data.forEach((trip) => {
+          console.log(trip);
+          this.trips.push({
+            name: trip.name,
+            description: trip.destination,
+            budget: trip.budget,
+            imagePath: 'https://picsum.photos/id/4/1230/500',
+          });
+        });
+      });
   },
 };
 </script>

@@ -10,11 +10,11 @@
     <section>
       <div class="columns">
         <div class="column is-half">
-          <h1 class="subtitle is-3">Eventos</h1>
+          <h1 class="subtitle is-3">Events</h1>
           <EventCarousel />
         </div>
         <div class="column">
-          <h1 class="subtitle is-3">Viajes</h1>
+          <h1 class="subtitle is-3">Trips</h1>
           <TripCarousel />
         </div>
       </div>

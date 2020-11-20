@@ -21,16 +21,11 @@ export default {
   name: 'Intro',
   data() {
     return {
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-        + 'Nullam ac ultricies risus, eu tincidunt ante. Quisque quis magna nunc. '
-        + 'Nunc tempus, urna non aliquam consequat, urna magna tincidunt tellus, '
-        + 'in egestas odio orci eget turpis. ',
+      description: 'In Yeoheng, you can plan your dream trips without going out of your home. '
+        + 'Share your events and trips with other users of the world. '
+        + 'You can decide if you want to share your events with other people, and establish a budget '
+        + 'for your events. Happy Tripping!',
     };
   },
 };
 </script>
-
-<style scoped>
-img {
-}
-</style>
