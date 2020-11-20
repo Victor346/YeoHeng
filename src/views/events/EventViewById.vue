@@ -1,7 +1,21 @@
 <template>
   <div>
     <section class="intro has-text-left">
-      <h1 class="title is-2">{{name}}</h1>
+      <div class="columns is-vcentered mx-4">
+        <div class="column is-8">
+          <span class="title is-2">{{name}}</span>
+        </div>
+        <div class="column has-text-right" v-if="!this.isPrivate">
+          <ForcePrivateButton
+            v-if="this.$store.state.login.role === 'superadmin'"
+            :id="this.$router.currentRoute.params.id"
+          />
+        </div>
+        <div class="column has-text-right" v-else>
+          <h1 class="title is-4">Private Event</h1>
+        </div>
+      </div>
+
     </section>
     <div class="hero is-light is-bold mx-6 my-2"
       style="background-image: none;background-color: white;">
@@ -44,11 +58,13 @@
 
 <script>
 import axios from 'axios';
+import ForcePrivateButton from '@/components/events/ForcePrivateButton.vue';
 // eslint-disable-next-line no-unused-vars
 const dotenv = require('dotenv');
 
 export default {
   name: 'EventViewById',
+  components: { ForcePrivateButton },
   props: {
     idProp: String,
   },
@@ -63,6 +79,7 @@ export default {
       duration: '',
       price: 0,
       tags: [],
+      isPrivate: false,
     };
   },
   mounted() {
@@ -82,7 +99,7 @@ export default {
         this.duration = response.data.duration;
         this.price = response.data.price;
         this.tags = response.data.tags;
-        console.log(JSON.stringify(response.data));
+        this.isPrivate = response.data.private;
       });
   },
 };
