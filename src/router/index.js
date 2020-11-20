@@ -11,6 +11,7 @@ import ViewTrip from '@/views/trips/ViewTrip.vue';
 import TripEdition from '@/views/trips/TripEdition.vue';
 import UserManagement from '@/views/UserManagement.vue';
 import EventEdition from '@/views/events/EventEdition.vue';
+import TripDetails from '@/components/trip/TripDetails.vue';
 
 Vue.use(VueRouter);
 
@@ -59,6 +60,11 @@ const routes = [
     path: '/trips',
     name: 'Trips',
     component: ViewTrip,
+  },
+  {
+    path: '/trip/:id',
+    name: 'Trip Details',
+    component: TripDetails,
   },
   {
     path: '/trip/edit/:id',
