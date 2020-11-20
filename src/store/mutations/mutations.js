@@ -7,6 +7,7 @@ export default {
     state.login.token = payload.token;
     state.login.id = payload.id;
     state.login.error = null;
+    state.login.provider = payload.provider;
   },
   [MutationTypes.LOGIN_FAILED](state, payload) {
     state.login.isLoading = false;
@@ -14,6 +15,7 @@ export default {
     state.login.token = null;
     state.login.id = null;
     state.login.error = payload.error;
+    state.login.provider = null;
   },
   [MutationTypes.LOGIN_LOADING](state) {
     state.login.isLoading = true;
@@ -25,5 +27,6 @@ export default {
     state.login.token = null;
     state.login.id = null;
     state.login.error = null;
+    state.login.provider = null;
   },
 };
