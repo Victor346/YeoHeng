@@ -31,6 +31,11 @@
         tag="router-link"
         :to="{ path: '/trips' }"
       >Trips</b-navbar-item>
+      <b-navbar-item
+        v-if="this.$store.state.login.role === 'superadmin'"
+        tag="router-link"
+        :to="{ path: '/user/management' }"
+      >Users</b-navbar-item>
     </template>
 
     <template slot="end">

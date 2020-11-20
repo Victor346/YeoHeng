@@ -19,6 +19,7 @@ export default new Vuex.Store({
       token: null,
       id: null,
       error: null,
+      role: null,
       provider: null,
     },
   },
