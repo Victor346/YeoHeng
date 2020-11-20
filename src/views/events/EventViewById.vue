@@ -17,7 +17,8 @@
       </div>
 
     </section>
-    <div class="hero is-light is-bold mx-6 my-2">
+    <div class="hero is-light is-bold mx-6 my-2"
+      style="background-image: none;background-color: white;">
       <div class="columns is-vcentered my-2 mx-4">
         <div class="column is-9 px-6">
           <h1 class="title is-3 has-text-left">
@@ -64,6 +65,9 @@ const dotenv = require('dotenv');
 export default {
   name: 'EventViewById',
   components: { ForcePrivateButton },
+  props: {
+    idProp: String,
+  },
   data() {
     return {
       name: '',
@@ -79,7 +83,12 @@ export default {
     };
   },
   mounted() {
-    axios.get(`${process.env.VUE_APP_BACKEND_URL}/event/${this.$router.currentRoute.params.id}`)
+    let { id } = this.$router.currentRoute.params;
+    console.log('id prop', this.idProp);
+    if (this.idProp !== undefined) {
+      id = this.idProp;
+    }
+    axios.get(`${process.env.VUE_APP_BACKEND_URL}/event/${id}`)
       .then((response) => {
         this.name = response.data.name;
         this.city = response.data.city;

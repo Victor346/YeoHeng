@@ -2,11 +2,11 @@
   <div class="column is-3">
     <div class="card">
       <b-button
-        id="editButton"
+        class="editButton"
         v-if="isOwned"
         icon-right="image-edit"
         tag="router-link"
-        :to="route"
+        :to="editRoute"
       >
         Edit
       </b-button>
@@ -120,7 +120,7 @@ export default {
   rgba(0,0,0,1), rgba(0,0,0,1), rgba(0,0,0,.2), rgba(0,0,0,0));
   object-fit: cover;
 }
-#editButton {
+.editButton {
   position: absolute;
   left: 1%;
   top: 1%;

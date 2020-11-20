@@ -1,5 +1,13 @@
 <template>
   <div class="">
+
+    <b-modal v-model="isModalActive">
+      <div class="modal-card" style="width: auto">
+        <section class="modal-card-body">
+          <EventViewById :idProp="event.id"></EventViewById>
+        </section>
+      </div>
+    </b-modal>
     <div class="card">
       <div
         class="card-image is-hidden-mobile"
@@ -60,10 +68,14 @@
 </template>
 
 <script>
+import EventViewById from '@/views/events/EventViewById.vue';
+
 export default {
   name: 'NewEventCard',
+  components: { EventViewById },
   data() {
     return {
+      isModalActive: false,
       viewRoute: `/event/${this.event.id}`,
     };
   },
@@ -88,7 +100,7 @@ export default {
   },
   methods: {
     moveToView() {
-      this.$router.push(this.viewRoute);
+      this.isModalActive = true;
     },
   },
 };
@@ -99,5 +111,8 @@ export default {
   mask-image: linear-gradient(to bottom, rgba(0,0,0,1),
   rgba(0,0,0,1), rgba(0,0,0,1), rgba(0,0,0,.2), rgba(0,0,0,0));
   object-fit: cover;
+}
+.modal-card {
+  border-radius: 7px;
 }
 </style>
