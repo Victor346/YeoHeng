@@ -202,7 +202,11 @@ export default {
             to: calendarFinishTime,
             from: calendarFrom,
           });
-          this.increasePrice(event.price);
+
+          axios.get(`${process.env.VUE_APP_BACKEND_URL}/trip/${this.$route.params.id}`)
+            .then((response) => {
+              this.price = response.data.budget;
+            });
           // console.log('kalendar', JSON.stringify(this.$refs.calendar.$kalendar.getEvents()));
         });
     },
