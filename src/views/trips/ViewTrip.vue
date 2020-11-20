@@ -203,7 +203,6 @@ export default {
     margin-left: 5%;
     margin-top: 25px;
     margin-right: 5%;
-    background-color: white;
   }
   section .tab-content {
     padding: 0 ;

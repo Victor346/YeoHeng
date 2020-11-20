@@ -9,6 +9,7 @@ import EventCreation from '@/views/events/EventCreation.vue';
 import ViewEvent from '@/views/events/ViewEvent.vue';
 import ViewTrip from '@/views/trips/ViewTrip.vue';
 import TripEdition from '@/views/trips/TripEdition.vue';
+import UserManagement from '@/views/UserManagement.vue';
 
 Vue.use(VueRouter);
 
@@ -58,6 +59,12 @@ const routes = [
     component: TripEdition,
     meta: { requiresAuthentication: true },
   },
+  {
+    path: '/user/management',
+    name: 'User Management',
+    component: UserManagement,
+    meta: { requiresSuperAdmin: true },
+  },
 ];
 
 const router = new VueRouter({
@@ -67,7 +74,13 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAuthentication)) {
+  if (to.matched.some((record) => record.meta.requiresSuperAdmin)) {
+    if (store.state.login.token !== null && store.state.login.role === 'superadmin') {
+      next();
+    } else {
+      next({ name: 'Login' });
+    }
+  } else if (to.matched.some((record) => record.meta.requiresAuthentication)) {
     if (store.state.login.username !== null && store.state.login.token !== null) {
       next();
     } else {
