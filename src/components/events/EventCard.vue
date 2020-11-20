@@ -13,6 +13,7 @@
       <div
         class="card-image is-hidden-mobile"
         style="margin-bottom: -20%"
+        @click="moveToView"
       >
         <figure class="image is-16by9">
           <img
@@ -52,7 +53,14 @@
             >
               {{tag}}
             </b-tag>
-
+            <b-button
+              v-if="isOwned"
+              icon-right="image-edit"
+              tag="router-link"
+              :to="editRoute"
+            >
+              Edit
+            </b-button>
           </b-taglist>
         </div>
         <footer class="card-footer">
@@ -73,7 +81,8 @@ export default {
   name: 'EventCard',
   data() {
     return {
-      route: `event/edit/${this.event.id}`,
+      viewRoute: `/event/${this.event.id}`,
+      editRoute: `/event/edit/${this.event.id}`,
     };
   },
   props: {
@@ -89,6 +98,17 @@ export default {
       description: String,
       category: String,
       tags: [String],
+    },
+  },
+  watch: {
+    event() {
+      this.viewRoute = `/event/${this.event.id}`;
+      this.editRoute = `/event/edit/${this.event.id}`;
+    },
+  },
+  methods: {
+    moveToView() {
+      this.$router.push(this.viewRoute);
     },
   },
 };

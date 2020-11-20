@@ -4,6 +4,7 @@
       <div
         class="card-image is-hidden-mobile"
         style="margin-bottom: -20%"
+        @click="moveToView"
       >
         <figure class="image is-16by9">
           <img
@@ -61,8 +62,14 @@
 <script>
 export default {
   name: 'NewEventCard',
+  data() {
+    return {
+      viewRoute: `/event/${this.event.id}`,
+    };
+  },
   props: {
     event: {
+      id: String,
       title: String,
       price: String,
       city: String,
@@ -72,6 +79,16 @@ export default {
       description: String,
       category: String,
       tags: [String],
+    },
+  },
+  watch: {
+    event() {
+      this.viewRoute = `/event/${this.event.id}`;
+    },
+  },
+  methods: {
+    moveToView() {
+      this.$router.push(this.viewRoute);
     },
   },
 };

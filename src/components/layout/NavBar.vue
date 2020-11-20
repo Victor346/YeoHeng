@@ -17,20 +17,12 @@
     </template>
 
     <template slot="start">
-      <b-navbar-dropdown label="Info">
-        <b-navbar-item
-          tag="router-link"
-          :to="{ path: '/about' }"
-        >
-          About Us
-        </b-navbar-item>
-        <b-navbar-item
-          tag="router-link"
-          :to="{ path: '/contact' }"
-        >
-          Contact
-        </b-navbar-item>
-      </b-navbar-dropdown>
+      <b-navbar-item
+        tag="router-link"
+        :to="{ path: '/about' }"
+      >
+        About Us
+      </b-navbar-item>
       <b-navbar-item
         tag="router-link"
         :to="{ path: '/events' }"
