@@ -7,10 +7,12 @@
     >
     </b-pagination>
   <div class="cardContainer" >
-    <TripCard v-for="(trip, i) in items"
-              :key="trip.id + 'My' + i"
-              :trip="trip"
-              :type="type"></TripCard>
+    <TripCard
+      v-for="(trip, i) in items"
+      :key="trip.id + 'My' + i"
+      :trip="trip"
+      :type="type"
+    />
   </div>
   </div>
 </template>

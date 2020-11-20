@@ -39,17 +39,12 @@
                     </b-field>
                   </div>
                 </div>
-                <b-field label="Price (USD)">
-                  <b-input
-                    v-model="price"
-                    placeholder="00.00"
-                    icon="currency-usd"
-                    type="number"
-                    min="0"
-                    step=".01"
-                    required
-                  ></b-input>
-                </b-field>
+                <div>
+                  <b-field label="Budget (USD)" />
+                  <b-icon icon="currency-usd" />
+                  <span class="subtitle">{{price.toFixed(2)}}</span>
+                </div>
+
                 <div class="columns">
                   <div class="column">
                     <b-field label="Is your trip private?">
@@ -70,6 +65,7 @@
           <Calendar
             :startDate="startDate"
             :calendar-events="this.events"
+            @remove-event="removeEvent"
             ref="calendar"
           />
         </div>
@@ -105,56 +101,61 @@ export default {
       endDate,
       minDate,
       maxDate,
-      price: null,
+      price: 0,
       isPrivate: false,
       city: null,
       country: null,
-      events: [
-        /* {
-          from: '2020-10-30T19:00:00Z',
-          to: '2020-10-30T21:00:00Z',
-          data: 'Olive & Dick',
-        }, */
-      ],
+      events: [],
     };
   },
-  mounted() {
-    const loadingComponent = this.$buefy.loading.open({
-      container: this.$refs.container,
-    });
-    axios.get(`${process.env.VUE_APP_BACKEND_URL}/trip/${this.$route.params.id}`)
-      .then((res) => {
-        this.country = res.data.destination.split(',')[1].trim();
-        this.city = res.data.destination.split(',')[0].trim();
-        this.name = res.data.name;
-        const offset = new Date().getTimezoneOffset();
-        this.startDate = new Date(Date.parse(res.data.start_date) + (offset * 60 * 1000));
-        this.endDate = new Date(Date.parse(res.data.end_date) + (offset * 60 * 1000));
-        this.price = res.data.budget;
-
-        res.data.events.forEach((event) => {
-          axios.get(`${process.env.VUE_APP_BACKEND_URL}/event/${event.event_id.$oid}`)
-            .then((eventRes) => {
-              this.events.push({
-                data: eventRes.data.name,
-                to: new Date(Date.parse(event.start_date) + event.duration).toISOString(),
-                from: new Date(Date.parse(event.start_date)).toISOString(),
-              });
-              this.$refs.calendar.$kalendar.addNewEvent({
-                data: eventRes.data.name,
-                to: new Date(Date.parse(event.start_date) + event.duration).toISOString(),
-                from: new Date(Date.parse(event.start_date)).toISOString(),
-              });
-            });
-        });
-
-        loadingComponent.close();
-      });
-  },
+  mounted() { this.getEvents(); },
   methods: {
     setName(name) { this.name = name; },
     setStartDate(startDate) { this.startDate = startDate; },
     setEndDate(endDate) { this.endDate = endDate; },
+    increasePrice(amount) { this.price += amount; },
+    getEvents() {
+      this.events = [];
+      const loadingComponent = this.$buefy.loading.open({
+        container: this.$refs.container,
+      });
+      axios.get(`${process.env.VUE_APP_BACKEND_URL}/trip/${this.$route.params.id}`)
+        .then((res) => {
+          this.country = res.data.destination.split(',')[1].trim();
+          this.city = res.data.destination.split(',')[0].trim();
+          this.name = res.data.name;
+          const offset = new Date().getTimezoneOffset();
+          this.startDate = new Date(Date.parse(res.data.start_date) + (offset * 60 * 1000));
+          this.endDate = new Date(Date.parse(res.data.end_date) + (offset * 60 * 1000));
+          this.price = res.data.budget;
+
+          res.data.events.forEach((event) => {
+            axios.get(`${process.env.VUE_APP_BACKEND_URL}/event/${event.event_id.$oid}`)
+              .then((eventRes) => {
+                this.events.push({
+                  data: eventRes.data.name,
+                  to: new Date(Date.parse(event.start_date) + event.duration).toISOString(),
+                  from: new Date(Date.parse(event.start_date)).toISOString(),
+                });
+                this.$refs.calendar.$kalendar.addNewEvent({
+                  data: {
+                    title: eventRes.data.name,
+                    tripId: this.$route.params.id,
+                    // eslint-disable-next-line no-underscore-dangle
+                    eventId: eventRes.data._id.$oid,
+                    startDate: event.start_date,
+                    startHour: event.start_hour,
+                    duration: event.duration,
+                    budget: eventRes.data.price,
+                  },
+                  to: new Date(Date.parse(event.start_date) + event.duration).toISOString(),
+                  from: new Date(Date.parse(event.start_date)).toISOString(),
+                });
+              });
+          });
+          loadingComponent.close();
+        });
+    },
     pushEvent(event) {
       const from = new Date(event.from).toISOString();
 
@@ -173,8 +174,8 @@ export default {
         start_date: calendarFrom,
         start_hour: calendarFrom,
         duration: (hours + minutes),
+        budget: event.price,
       };
-
       axios.put(`${process.env.VUE_APP_BACKEND_URL}/trip/add`, data, {
         headers: {
           Authorization: `Bearer ${this.$store.state.login.token}`,
@@ -186,13 +187,46 @@ export default {
             to: calendarFinishTime,
             from: event.from.toISOString(),
           });
-          // TODO: El calendario esta 6 horas adelantado por UTC.
+          // The calendar is ahead 6 hours due to UTC.
           this.$refs.calendar.$kalendar.addNewEvent({
-            ...event,
-            data: event.title,
+            data: {
+              title: event.title,
+              tripId: this.$route.params.id,
+              // eslint-disable-next-line no-underscore-dangle
+              eventId: event.id,
+              startDate: calendarFrom,
+              startHour: calendarFrom,
+              duration: (hours + minutes),
+              budget: event.price,
+            },
             to: calendarFinishTime,
             from: calendarFrom,
           });
+
+          axios.get(`${process.env.VUE_APP_BACKEND_URL}/trip/${this.$route.params.id}`)
+            .then((response) => {
+              this.price = response.data.budget;
+            });
+          // console.log('kalendar', JSON.stringify(this.$refs.calendar.$kalendar.getEvents()));
+        });
+    },
+    removeEvent(event) {
+      const data = {
+        _id: { $oid: event.tripId },
+        event_id: { $oid: event.eventId },
+        start_date: event.startDate,
+        start_hour: event.startHour,
+        duration: event.duration,
+        budget: event.budget,
+      };
+      axios.put(`${process.env.VUE_APP_BACKEND_URL}/trip/remove`, data, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.login.token}`,
+        },
+      })
+        .then(() => {
+          // console.log(JSON.stringify(response));
+          window.location.reload();
         });
     },
     handleSubmit() {
