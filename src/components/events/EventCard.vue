@@ -72,8 +72,8 @@ export default {
   name: 'EventCard',
   data() {
     return {
-      viewRoute: `event/${this.event.id}`,
-      editRoute: `event/edit/${this.event.id}`,
+      viewRoute: `/event/${this.event.id}`,
+      editRoute: `/event/edit/${this.event.id}`,
     };
   },
   props: {
@@ -93,8 +93,8 @@ export default {
   },
   watch: {
     event() {
-      this.viewRoute = `event/${this.event.id}`;
-      this.editRoute = `event/edit/${this.event.id}`;
+      this.viewRoute = `/event/${this.event.id}`;
+      this.editRoute = `/event/edit/${this.event.id}`;
     },
   },
   methods: {
