@@ -25,6 +25,7 @@ export default {
           token: response.data.jwt,
           id: response.data.id,
           role: response.data.role,
+          provider: 'YeoHeng',
         });
       })
       .catch((error) => {

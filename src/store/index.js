@@ -20,6 +20,7 @@ export default new Vuex.Store({
       id: null,
       error: null,
       role: null,
+      provider: null,
     },
   },
   mutations: Mutations,
