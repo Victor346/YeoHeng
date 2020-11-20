@@ -25,6 +25,9 @@
                 <h2 class="subtitle is-5">
                   {{carousel.description}}
                 </h2>
+                <h2 class="subtitle is-5">
+                  {{carousel.personalType}}, ${{carousel.price}}
+                </h2>
               </div>
             </div>
           </div>
@@ -35,38 +38,33 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'EventCarousel',
   data() {
     return {
-      carousels: [
-        {
-          name: 'Event 1',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-            + 'Nullam ac ultricies risus, eu tincidunt ante. Quisque quis magna nunc. ',
-          imagePath: 'https://picsum.photos/id/4/1230/500',
-        },
-        {
-          name: 'Event 2',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-            + 'Nullam ac ultricies risus, eu tincidunt ante. Quisque quis magna nunc. ',
-          imagePath: 'https://picsum.photos/id/4/1230/500',
-        },
-        {
-          name: 'Event 3',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-            + 'Nullam ac ultricies risus, eu tincidunt ante. Quisque quis magna nunc. ',
-          imagePath: 'https://picsum.photos/id/4/1230/500',
-        },
-        {
-          name: 'Event 4',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-            + 'Nullam ac ultricies risus, eu tincidunt ante. Quisque quis magna nunc. '
-            + 'Nullam ac ultricies risus, eu tincidunt ante. Quisque quis magna nunc. ',
-          imagePath: 'https://picsum.photos/id/4/1230/500',
-        },
-      ],
+      carousels: [],
     };
+  },
+  mounted() {
+    axios.get(`${process.env.VUE_APP_BACKEND_URL}/event`, {
+      params: {
+        offset: 0,
+        limit: 7,
+      },
+    })
+      .then((response) => {
+        response.data.forEach((event) => {
+          this.carousels.push({
+            name: `${event.city}, ${event.country}`,
+            description: event.description,
+            imagePath: event.image,
+            personalType: event.personal_type,
+            price: event.price,
+          });
+        });
+      });
   },
 };
 </script>
