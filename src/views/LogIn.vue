@@ -48,13 +48,21 @@ export default {
   methods: {
     onSignIn(googleUser) {
       const profile = googleUser.getBasicProfile();
+      const authResponse = googleUser.getAuthResponse();
+      console.log((authResponse));
+      console.log((profile));
       console.log(`ID: ${profile.getId()}`); // Do not send to your backend! Use an ID token instead.
       console.log(`Name: ${profile.getName()}`);
       console.log(`Image URL: ${profile.getImageUrl()}`);
       console.log(`Email: ${profile.getEmail()}`); // This is null if the 'email' scope is not present.
+
+      // TODO: Mandar endpoint al back
+      // eslint-disable-next-line no-unused-vars
+      const token = authResponse.id_token;
+
       this.$store.commit(LOGIN_SUCCESS, {
         username: profile.getName(),
-        token: 'TODOGoogle',
+        token: authResponse.id_token,
         id: 'TODOGoogleID',
         provider: 'Google',
       });
