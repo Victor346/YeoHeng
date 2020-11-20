@@ -6,16 +6,16 @@
       :events.sync="events"
     >
       <div slot="created-card" slot-scope="{ event_information }" class="details-card">
-        <h4 class="appointment-title">{{event_information.data}}</h4>
-        <small class="appointment-description">
-          {{event_information.data}}
-        </small>
+        <h4 class="appointment-title">{{event_information.data.title}}</h4>
         <span>
           {{new Date(event_information.start_time).getHours()}} :
           {{new Date(event_information.start_time).getMinutes()}} -
           {{new Date(event_information.end_time).getHours() }} :
           {{new Date(event_information.end_time).getMinutes()}}
         </span>
+        <b-button class="is-danger" size="is-small" @click="removeEvent(event_information.data)">
+          Remove
+        </b-button>
       </div>
     </kalendar>
   </div>
@@ -49,6 +49,11 @@ export default {
       },
       events: this.calendarEvents,
     };
+  },
+  methods: {
+    removeEvent(event) {
+      this.$emit('remove-event', event);
+    },
   },
 };
 </script>
