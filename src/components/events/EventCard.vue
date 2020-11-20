@@ -1,6 +1,15 @@
 <template>
   <div class="column is-3">
     <div class="card">
+      <b-button
+        id="editButton"
+        v-if="isOwned"
+        icon-right="image-edit"
+        tag="router-link"
+        :to="route"
+      >
+        Edit
+      </b-button>
       <div
         class="card-image is-hidden-mobile"
         style="margin-bottom: -20%"
@@ -43,14 +52,7 @@
             >
               {{tag}}
             </b-tag>
-            <b-button
-              v-if="isOwned"
-              icon-right="image-edit"
-              tag="router-link"
-              :to="route"
-            >
-              Edit
-            </b-button>
+
           </b-taglist>
         </div>
         <footer class="card-footer">
@@ -97,5 +99,11 @@ export default {
   mask-image: linear-gradient(to bottom, rgba(0,0,0,1),
   rgba(0,0,0,1), rgba(0,0,0,1), rgba(0,0,0,.2), rgba(0,0,0,0));
   object-fit: cover;
+}
+#editButton {
+  position: absolute;
+  left: 1%;
+  top: 1%;
+  z-index: 1;
 }
 </style>
