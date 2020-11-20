@@ -39,17 +39,12 @@
                     </b-field>
                   </div>
                 </div>
-                <b-field label="Price (USD)">
-                  <b-input
-                    v-model="price"
-                    placeholder="00.00"
-                    icon="currency-usd"
-                    type="number"
-                    min="0"
-                    step=".01"
-                    required
-                  ></b-input>
-                </b-field>
+                <div>
+                  <b-field label="Budget (USD)" />
+                  <b-icon icon="currency-usd" />
+                  <span class="subtitle">{{price.toFixed(2)}}</span>
+                </div>
+
                 <div class="columns">
                   <div class="column">
                     <b-field label="Is your trip private?">
@@ -105,7 +100,7 @@ export default {
       endDate,
       minDate,
       maxDate,
-      price: null,
+      price: 0,
       isPrivate: false,
       city: null,
       country: null,
@@ -155,6 +150,7 @@ export default {
     setName(name) { this.name = name; },
     setStartDate(startDate) { this.startDate = startDate; },
     setEndDate(endDate) { this.endDate = endDate; },
+    increasePrice(amount) { this.price += amount; },
     pushEvent(event) {
       const from = new Date(event.from).toISOString();
 
@@ -174,7 +170,6 @@ export default {
         start_hour: calendarFrom,
         duration: (hours + minutes),
       };
-
       axios.put(`${process.env.VUE_APP_BACKEND_URL}/trip/add`, data, {
         headers: {
           Authorization: `Bearer ${this.$store.state.login.token}`,
@@ -193,6 +188,7 @@ export default {
             to: calendarFinishTime,
             from: calendarFrom,
           });
+          this.increasePrice(event.price);
         });
     },
     handleSubmit() {
