@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div id="center-column" style="text-align: left;">
-        <h2 class="title is-2">Edit your event ({{ this.previousCity }})</h2>
+        <h2 class="title is-2">Edit your event to {{ this.previousCity }}</h2>
       <form @submit.prevent="handleSubmit">
         <div class="columns">
 
