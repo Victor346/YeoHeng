@@ -10,6 +10,7 @@ import ViewEvent from '@/views/events/ViewEvent.vue';
 import ViewTrip from '@/views/trips/ViewTrip.vue';
 import TripEdition from '@/views/trips/TripEdition.vue';
 import EventEdition from '@/views/events/EventEdition.vue';
+import EventViewById from '@/views/events/EventViewById.vue';
 
 Vue.use(VueRouter);
 
@@ -42,6 +43,11 @@ const routes = [
     name: 'New Event',
     component: EventCreation,
     meta: { requiresAuthentication: true },
+  },
+  {
+    path: '/event/:id',
+    name: 'View Event',
+    component: EventViewById,
   },
   {
     path: '/event/edit/:id',
