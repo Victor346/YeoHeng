@@ -53,14 +53,6 @@
             >
               {{tag}}
             </b-tag>
-            <b-button
-              v-if="isOwned"
-              icon-right="image-edit"
-              tag="router-link"
-              :to="editRoute"
-            >
-              Edit
-            </b-button>
           </b-taglist>
         </div>
         <footer class="card-footer">
