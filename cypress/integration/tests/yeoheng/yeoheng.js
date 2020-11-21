@@ -7,8 +7,8 @@ Given('I am on the homepage', () => {
 
 Then('Verify titles are correct', () => {
   cy.get('.intro > .title').contains('YeoHeng');
-  cy.get('.is-half > .is-3').contains('Eventos');
-  cy.get(':nth-child(2) > .is-3').contains('Viajes');
+  cy.get('.is-half > .is-3').contains('Events');
+  cy.get(':nth-child(2) > .is-3').contains('Trips');
 });
 
 When('I click the hamburger menu', () => {
@@ -47,10 +47,10 @@ Then('I verify demo cards are correct', () => {
   let i = 2;
   const cypressCardCss = `:nth-child(${i}) > .card > .card-content >`;
 
-  cy.get(cypressCardCss + ' .media > .media-content > .title').contains('pepe');
-  cy.get(cypressCardCss + ' .media > .media-content > .subtitle').contains('Vatican');
-  cy.get(cypressCardCss + ' .content > p').contains('pepe');
-  cy.get(cypressCardCss + ' .content > .tags > :nth-child(1) > span').contains('BTS');
+  cy.get(cypressCardCss + ' .media > .media-content > .title').contains('Test Event');
+  cy.get(cypressCardCss + ' .media > .media-content > .subtitle').contains('París');
+  cy.get(cypressCardCss + ' .content > p').contains('This is a test event');
+  cy.get(cypressCardCss + ' .content > .tags > :nth-child(1) > span').contains('example');
 
 });
 
@@ -79,4 +79,33 @@ Then('I fill the form', () => {
   cy.get('.file-label > input').attachFile('pekora.jpg');
 
   cy.get('.column > .button').click();
+});
+
+Then('I go to the trips option', () => {
+  cy.get('[href="/trips"]').click();
+  cy.wait(1000);
+  cy.get('#main-title').contains('Trips');
+});
+
+When('I click on the register event button', () => {
+  cy.get('[style="margin-top: 25px; margin-left: 5%;"] > .button').click();
+  cy.wait(1000);
+  cy.get('.modal-card-title').contains('Register new trip');
+});
+
+Then('I fill the trip form', () => {
+  cy.get('.columns > :nth-child(1) > :nth-child(1) > .control > .input').type('Test Trip');
+  cy.get(':nth-child(2) > .datepicker > .dropdown > .dropdown-trigger > .control > .input').click();
+  cy.get(':nth-child(2) > .datepicker > .dropdown > .dropdown-menu > .dropdown-content > .dropdown-item > :nth-child(1) > .datepicker-content > .datepicker-table > .datepicker-body > :nth-child(3) > .is-today')
+    .click();
+  cy.get(':nth-child(3) > .datepicker > .dropdown > .dropdown-trigger > .control > .input').click();
+  cy.get(':nth-child(3) > .datepicker > .dropdown > .dropdown-menu > .dropdown-content > .dropdown-item > :nth-child(1) > .datepicker-content > .datepicker-table > .datepicker-body > :nth-child(4) > :nth-child(6)')
+    .click();
+  cy.get('.autocomplete > .control > .input').type('Paris, France');
+  cy.get('.check').click();
+});
+
+And('I submit the trip form', () => {
+  cy.get('.modal-card-foot > .button').click();
+  cy.wait(1000);
 });
