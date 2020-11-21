@@ -29,8 +29,6 @@
                   trap-focus>
                 </b-datepicker>
               </b-field>
-
-              <b-checkbox>Remember me</b-checkbox>
             </section>
             <footer class="modal-card-foot">
               <button class="button" type="button" @click="isModalActive=false">Close</button>
