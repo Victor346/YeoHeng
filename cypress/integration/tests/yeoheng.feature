@@ -19,3 +19,10 @@ Feature: Yeoheng
     Given I am on the create event page
     Then I fill the form
 
+  Scenario: Create Trip
+    Given I am on the events page
+    When I click the hamburger menu
+    Then I go to the trips option
+    When I click on the register event button
+    Then I fill the trip form
+    And I submit the trip form

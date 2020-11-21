@@ -18,7 +18,7 @@
           <div class="media-left is-hidden-desktop">
             <figure class="image is-48x48">
               <img
-                :src="imgUrl"
+                src="../../assets/yeoheng_logo.png"
                 alt="Event image"
               />
             </figure>
@@ -60,7 +60,8 @@ export default {
     };
   },
   async mounted() {
-    this.imgUrl = 'https://media1.tenor.com/images/a8b6a5195b658b2e8882383e44083023/tenor.gif?itemid=18439707';
+    // eslint-disable-next-line global-require
+    this.imgUrl = require('../../assets/yeoheng_logo_double.png');
   },
   props: {
     type: String,
